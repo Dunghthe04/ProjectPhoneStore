@@ -1,6 +1,9 @@
 const express=require('express')
 const app=express()
-const port=9999
+
+//env
+require('dotenv').config()
+const port=process.env.PORT
 //route
 const clientRoute=require('./routes/client/index.route.js')
 
