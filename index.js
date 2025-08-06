@@ -11,6 +11,8 @@ const clientRoute=require('./routes/client/index.route.js')
 app.set('views','./views')
 app.set('view engine','pug')
 
+//static file
+app.use(express.static("public"));
 
 clientRoute(app);
 
