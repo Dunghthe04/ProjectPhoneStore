@@ -1,8 +1,13 @@
 const express=require('express')
-const app=express()
-
 //env
 require('dotenv').config()
+
+
+//database config(mongoose connect to database)
+const database=require('./config/database')
+database.connect();
+
+const app=express()
 const port=process.env.PORT
 //route
 const clientRoute=require('./routes/client/index.route.js')
