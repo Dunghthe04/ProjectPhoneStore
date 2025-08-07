@@ -36,11 +36,19 @@ module.exports.index=async(req,res)=>{
     find.status=req.query.status;
   }
 
+  //tìm kiếm = keyword
+  let keyword="";
+  if(req.query.keyword){
+    keyword=req.query.keyword;
+    const regrex = new RegExp(keyword,"i");// tìm dữ liệu chứa keyword, ko phan biet hoa thuong
+    find.title=regrex;
+  }
   const productList=await products.find(find) 
   
   res.render('admin/pages/products/index',{
     pageTitle: "Danh sach san pham",
     products: productList,
-    filterButtons: filterStatus
+    filterButtons: filterStatus,
+    keywordSearch: keyword
   })
 }

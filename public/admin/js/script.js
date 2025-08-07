@@ -1,4 +1,4 @@
-//Search by status(1)
+//Fillter by status(1)
 const buttonStatus=document.querySelectorAll("[button-status]")
 if(buttonStatus.length>0){
     let url=new URL(window.location.href);
@@ -13,4 +13,20 @@ if(buttonStatus.length>0){
             window.location.href=url.href;
         })
     })
+}
+
+//Search by name
+const formSearch=document.querySelector("#form-search")
+if(formSearch){
+   let url=new URL(window.location.href);
+   formSearch.addEventListener("submit",(e)=>{
+     e.preventDefault();
+     const valueSearch=e.target.elements.keyword.value;
+     if(valueSearch){
+        url.searchParams.set("keyword",valueSearch);
+     }else{
+        url.searchParams.delete("keyword");
+     }
+     window.location.href=url.href;
+   })     
 }
