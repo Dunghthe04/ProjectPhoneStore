@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/filterButton.pug
+include ../../mixins/searchByKeyword.pug
 block main 
  h1 Danh sach san pham
  
@@ -8,26 +9,11 @@ block main
    .card-body 
     .row 
       .col-7 
-         each button in filterButtons
-            button(
-                class=`btn btn-sm ml-1 btn-outline-success ${button.class}`
-                button-status=button.status
-            ) #{button.name}
+         //-Tối ưu filter button
+         +filterButton(filterButtons)
       .col-5 
-         form(id="form-search")
-           .input-group 
-            input(
-              type="text"
-              placeholder="Nhập từ khóa"
-              name="keyword"
-              class="form-control"
-              value=keywordSearch
-            )
-            .input-group-append 
-              button(
-                type="submit"
-                class="btn btn-success"
-              ) Tìm
+         //-Tối ưu searchByKeyword
+         +searchByKeyword(keywordSearch)
 
 
  .card.mb-3 
