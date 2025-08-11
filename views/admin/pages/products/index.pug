@@ -1,10 +1,11 @@
 extends ../../layouts/default.pug
 include ../../mixins/filterButton.pug
 include ../../mixins/searchByKeyword.pug
+include ../../mixins/pagination.pug
 block main 
  h1 Danh sach san pham
  
- .card.mb-3 
+  .card.mb-3 
    .card-header Bộ lọc và tìm kiếm 
    .card-body 
     .row 
@@ -16,7 +17,7 @@ block main
          +searchByKeyword(keywordSearch)
 
 
- .card.mb-3 
+  .card.mb-3 
    .card-header Danh sách sản phẩm
     .card-body 
      table.table.table-hover.table-sm 
@@ -48,4 +49,5 @@ block main
               td 
                   button(class="btn btn-warning btn-sm") Sửa
                   button(class="btn btn-danger btn-sm ml-1") Xóa     
-                   
+  //-Tối ưu pagination
+  +pagination(objectPagination)                        

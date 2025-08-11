@@ -51,3 +51,15 @@ body .main {
 }
 
 /*End Sider */
+
+/* Giảm size và bỏ đậm bảng */
+.table th, .table td {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+/* Giảm size h1 */
+h1 {
+    font-size: 20px; 
+    font-weight: 600;
+}
