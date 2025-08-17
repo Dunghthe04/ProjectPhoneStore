@@ -52,3 +52,22 @@ module.exports.changeStatusProduct=async(req,res)=>{
 
    res.redirect(req.get("referer"))
 }
+
+module.exports.changeMulti=async(req,res)=>{
+  //lấy ra các id và type ơ req.body
+  const type=req.body.type;
+  const ids=req.body.ids;
+  const productsIdChange=ids.split(", ");
+
+  switch (type) {
+    case 'active':
+      await products.updateMany({_id: { $in: productsIdChange }},{status: type})
+      break;
+    case 'inactive':
+      await products.updateMany({_id: { $in: productsIdChange }},{status: type})
+      break;  
+    default:
+      break;
+  }
+   res.redirect(req.get("referer"))
+}
