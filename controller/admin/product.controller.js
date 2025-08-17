@@ -71,3 +71,16 @@ module.exports.changeMulti=async(req,res)=>{
   }
    res.redirect(req.get("referer"))
 }
+
+module.exports.delete=async(req,res)=>{
+   const productId=req.params.id;
+   
+   //xóa cứng
+   //await products.deleteOne({_id: productId});
+   
+   //xóa mềm
+   await products.updateOne({_id: productId},{
+    deleted: true,
+    deletedAt: new Date()});
+   res.redirect(req.get("referer"))
+}
