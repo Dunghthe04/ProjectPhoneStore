@@ -123,3 +123,42 @@ if (buttonsDelete.length > 0) {
         })
     })
 }
+
+//recover
+const buttonRecover = document.querySelectorAll("[button-recover]");
+if (buttonRecover.length > 0) {
+    const formRecover = document.querySelector("#formRecover");
+    const path = formRecover.getAttribute("path");
+    buttonRecover.forEach(button => {
+        button.addEventListener("click", () => {
+            const isConfirm = confirm("Bạn có chắc chắn muốn khôi phục");
+            if (isConfirm) {
+                const productId = button.getAttribute("data-id");
+                const action = path + `/${productId}?_method=PATCH`
+                formDelete.action = action;
+                formDelete.submit();
+            }
+
+        })
+    })
+}
+//end recover
+//deletePermanently
+const deletePermanently = document.querySelectorAll("[button-delete-permently]");
+if (deletePermanently.length > 0) {
+    const formDelete = document.querySelector("#formDelete");
+    const path = formDelete.getAttribute("path");
+    deletePermanently.forEach(button => {
+        button.addEventListener("click", () => {
+            const isConfirm = confirm("Bạn có chắc chắn muốn xóa vĩnh viễn");
+            if (isConfirm) {
+                const productId = button.getAttribute("data-id");
+                const action = path + `/${productId}?_method=DELETE`
+                formDelete.action = action;
+                formDelete.submit();
+            }
+
+        })
+    })
+}
+//end deletePermanently

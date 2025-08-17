@@ -26,10 +26,10 @@ block main
             +formChangeMulti(`${prefixAdmin}/products/change-multi?_method=PATCH`)  
         .col-6 
             a(
-              href=`${prefixAdmin}/products/recover`
+              href=`${prefixAdmin}/products`
               class="d-flex justify-content-end"
             )
-             button(class="btn btn-dark btn-sm") Xóa gần đây
+             button(class="btn btn-dark btn-sm") Quay trở lại danh sách sản phẩm
      table(
        class="table table-hover table-sm"
        check-box-multi
@@ -72,26 +72,30 @@ block main
                       button-change-status
                       class="badge badge-danger") Dừng hoạt động   
               td 
-                  button(class="btn btn-warning btn-sm") Sửa
+                  button(
+                    class="btn btn-warning btn-sm"
+                    data-id=item.id
+                    button-recover
+                    ) Phục hồi
                   button(
                     class="btn btn-danger btn-sm ml-1"
                     data-id=item.id
-                    button-delete
-                    ) Xóa     
+                    button-delete-permently
+                    ) Xóa vĩnh viễn     
   //-Tối ưu pagination
   +pagination(objectPagination)    
 
   form(
     action=""
     method="Post"
-    id="formChangeStatus"
-    path=`${prefixAdmin}/products/change-product-status`
+    id="formRecover"
+    path=`${prefixAdmin}/products/recoverProduct`
   )
 
   form(
     action=""
     method="POST"
     id="formDelete"
-    path=`${prefixAdmin}/products/delete`
+    path=`${prefixAdmin}/products/deletePermanently`
   )
   script(src="/admin/js/products.js")                    

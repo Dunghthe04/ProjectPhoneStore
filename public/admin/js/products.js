@@ -17,3 +17,5 @@ if(buttonsChangeStatus.length>0){
     })
 }
 //End Change-status-product
+
+
