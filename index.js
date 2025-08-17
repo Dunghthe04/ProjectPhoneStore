@@ -3,6 +3,8 @@ const express=require('express')
 require('dotenv').config()
 //config
 const systemconfig=require('./config/system.js')
+//method_override(dùng để ghi đè pthuc gửi form lên)
+const methodOverride = require('method-override')
 
 //database config(mongoose connect to database)
 const database=require('./config/database')
@@ -13,6 +15,9 @@ const port=process.env.PORT
 //route
 const clientRoute=require('./routes/client/index.route.js')
 const adminRoute=require('./routes/admin/index.route.js')
+
+//method_override
+app.use(methodOverride('_method'))
 //pug 
 app.set('views','./views')
 app.set('view engine','pug')

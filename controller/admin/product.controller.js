@@ -31,7 +31,7 @@ module.exports.index=async(req,res)=>{
     limit:5
   },req.query,countNumberDocuments)
 
-  
+                       
   const productList=await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip) 
   
   res.render('admin/pages/products/index',{
@@ -41,4 +41,14 @@ module.exports.index=async(req,res)=>{
     keywordSearch: objectSearch.keyword,
     objectPagination: objectPagination
   })
+}
+
+module.exports.changeStatusProduct=async(req,res)=>{
+   //lấy ra id product, và status muốn cập nhập
+   const status=req.params.status;  
+   const id=req.params.id;
+   
+   await products.updateOne({_id:id},{status: status})
+
+   res.redirect(req.get("referer"))
 }
