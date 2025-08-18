@@ -89,6 +89,16 @@ if (formChangeMulti) {
         const checkBoxMulti = document.querySelector("[check-box-multi]");
         //lấy ra các ô input check
         const inputChecked = checkBoxMulti.querySelectorAll("input[name='id']:checked");
+
+        //kiểm tra xem nếu là xóa -> vẫn lấy ra các nút check đó và gửi backend
+        const typeChange=e.target.elements.type.value;
+        if(typeChange==="deleteAll"){
+            const confimCheck=confirm("Bạn có chắc chắn muốn xóa tất cả sản phẩm chọn!!!");
+            if(!confimCheck){//nếu k xóa -> return
+                return;
+            }
+        }
+        
         if (inputChecked.length > 0) {
             let ids = []; // mảng chứa các id 
             //lấy ra ô input id của form

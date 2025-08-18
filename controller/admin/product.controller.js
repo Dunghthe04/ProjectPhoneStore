@@ -81,7 +81,26 @@ module.exports.changeMulti = async (req, res) => {
       }, {
         status: type
       })
+
+     case 'deleteAll':
+      await products.updateMany({
+        _id: {
+          $in: productsIdChange
+        }
+      }, {
+        deleted: true,
+        deletedAt: new Date()
+      })  
       break;
+    case 'recoverAll':
+      await products.updateMany({
+        _id: {
+          $in: productsIdChange
+        }
+      }, {
+        deleted: false,
+      })  
+      break;  
     default:
       break;
   }
