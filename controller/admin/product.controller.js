@@ -47,14 +47,12 @@ module.exports.changeStatusProduct = async (req, res) => {
   //lấy ra id product, và status muốn cập nhập
   const status = req.params.status;
   const id = req.params.id;
-
-
-  
   await products.updateOne({
     _id: id
   }, {
     status: status
   })
+  req.flash("success","Thay đổi trạng thái thành công");
 
   res.redirect(req.get("referer"))
 }
@@ -74,6 +72,7 @@ module.exports.changeMulti = async (req, res) => {
       }, {
         status: type
       })
+      req.flash("success",`Thay đổi thành công ${productsIdChange.length} sản phẩm`);
       break;
     case 'inactive':
       await products.updateMany({
@@ -83,6 +82,8 @@ module.exports.changeMulti = async (req, res) => {
       }, {
         status: type
       })
+      req.flash("success",`Thay đổi thành công ${productsIdChange.length} sản phẩm`);
+      break;
 
      case 'deleteAll':
       await products.updateMany({
@@ -93,6 +94,7 @@ module.exports.changeMulti = async (req, res) => {
         deleted: true,
         deletedAt: new Date()
       })  
+      req.flash("success",`Xóa thành công ${productsIdChange.length} sản phẩm`);
       break;
     case 'recoverAll':
       await products.updateMany({
@@ -102,6 +104,7 @@ module.exports.changeMulti = async (req, res) => {
       }, {
         deleted: false,
       })  
+      req.flash("success",`Khôi phục thành công ${productsIdChange.length} sản phẩm`);
       break; 
     case 'changePosition':
       for (let ele of productsIdChange) {
@@ -113,6 +116,7 @@ module.exports.changeMulti = async (req, res) => {
           position: position,
         })  
       }
+      req.flash("success",`Thay đổi vị trí thành công ${productsIdChange.length} sản phẩm`);
       break;    
     default:
       break;
@@ -133,6 +137,7 @@ module.exports.delete = async (req, res) => {
     deleted: true,
     deletedAt: new Date()
   });
+  req.flash("success",`Xóa thành công sản phẩm ${productId}`);
   res.redirect(req.get("referer"))
 }
 
@@ -184,6 +189,7 @@ module.exports.recoverProduct = async (req, res) => {
   }, {
     deleted: false,
   });
+  req.flash("success",`Khôi phục thành công sản phẩm ${productId}`);
   res.redirect(req.get("referer"))
 }
 
@@ -191,5 +197,6 @@ module.exports.recoverProduct = async (req, res) => {
 module.exports.deletePermanently=async(req,res)=>{
   const productId=req.params.id;
   await products.deleteOne({_id:productId});
+  req.flash("success",`Đã xóa vĩnh viễn sản phẩm ${productId}`);
   res.redirect(req.get("referer"))
 }
