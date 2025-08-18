@@ -32,7 +32,7 @@ module.exports.index = async (req, res) => {
   }, req.query, countNumberDocuments)
 
 
-  const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip)
+  const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip).sort({position: "desc"})
 
   res.render('admin/pages/products/index', {
     pageTitle: "Danh sach san pham",
@@ -48,6 +48,8 @@ module.exports.changeStatusProduct = async (req, res) => {
   const status = req.params.status;
   const id = req.params.id;
 
+
+  
   await products.updateOne({
     _id: id
   }, {
@@ -100,7 +102,18 @@ module.exports.changeMulti = async (req, res) => {
       }, {
         deleted: false,
       })  
-      break;  
+      break; 
+    case 'changePosition':
+      for (let ele of productsIdChange) {
+        const [id,position]=ele.split("-");
+        
+        await products.updateMany({
+        _id: id
+        }, {
+          position: position,
+        })  
+      }
+      break;    
     default:
       break;
   }

@@ -91,21 +91,34 @@ if (formChangeMulti) {
         const inputChecked = checkBoxMulti.querySelectorAll("input[name='id']:checked");
 
         //kiểm tra xem nếu là xóa -> vẫn lấy ra các nút check đó và gửi backend
-        const typeChange=e.target.elements.type.value;
-        if(typeChange==="deleteAll"){
-            const confimCheck=confirm("Bạn có chắc chắn muốn xóa tất cả sản phẩm chọn!!!");
-            if(!confimCheck){//nếu k xóa -> return
+        const typeChange = e.target.elements.type.value;
+        if (typeChange === "deleteAll") {
+            const confimCheck = confirm("Bạn có chắc chắn muốn xóa tất cả sản phẩm chọn!!!");
+            if (!confimCheck) { //nếu k xóa -> return
                 return;
             }
         }
-        
+
+        //phần sử lý lấy checkbox chung
         if (inputChecked.length > 0) {
             let ids = []; // mảng chứa các id 
             //lấy ra ô input id của form
             const inputForm = formChangeMulti.querySelector("input[name='ids']");
             inputChecked.forEach(input => {
+                //lấy id sản phẩm
                 const idProduct = input.value;
-                ids.push(idProduct);
+
+                //nếu là change position -> lấy thêm cả position và lưu vào ids dạng id-position
+                if (typeChange == "changePosition") {
+                    //từ thẻ checkbox-> ngoài cha-> vào thẻ postition con
+                    const postionTag = input.closest("tr").querySelector("input[name='position']").value;
+                    const position = parseInt(postionTag);
+                    const ele = `${idProduct}-${position}`;
+                    ids.push(ele);
+                } else {
+                    //nếu là option khac chỉ cần push id
+                    ids.push(idProduct);
+                }
             });
             inputForm.value = ids.join(", ");
             formChangeMulti.submit();
