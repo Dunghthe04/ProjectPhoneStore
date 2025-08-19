@@ -2,6 +2,7 @@ const products = require('../../models/product.model')
 const filterHelper = require('../../helpers/FilterByStatus')
 const searchHelper = require('../../helpers/searchByKeyword')
 const paginationHelper = require('../../helpers/pagination')
+const config=require("../../config/system")
 module.exports.index = async (req, res) => {
 
   //Tối ưu các nút search by status
@@ -199,4 +200,32 @@ module.exports.deletePermanently=async(req,res)=>{
   await products.deleteOne({_id:productId});
   req.flash("success",`Đã xóa vĩnh viễn sản phẩm ${productId}`);
   res.redirect(req.get("referer"))
+}
+
+//create product(render index)
+module.exports.create=async(req,res)=>{
+  res.render("admin/pages/products/create.pug",{
+    pageTitle: "Trang tạo mới sản phẩm"
+  })
+}
+
+//Create product post
+module.exports.createPost=async(req,res)=>{
+   req.body.price=parseInt(req.body.price);
+   req.body.discountPercentage=parseInt(req.body.discountPercentage);
+   req.body.stock=parseInt(req.body.stock);
+
+  //nếu k nhập postion -> đếm rồi +1 
+  if(req.body.position===""){
+    const numberOfProduct=await products.countDocuments();
+    req.body.position=numberOfProduct+1;
+  }else{
+    req.body.position=req.body.position;
+  }
+  //tạo product với thông tin trong req.body, rồi lưu vào database
+  const product=new products(req.body);
+  product.save();
+
+  req.flash("success","Thêm 1 sản phẩm thành công")
+  res.redirect(`${config.PrefixAdmin}/products`)
 }

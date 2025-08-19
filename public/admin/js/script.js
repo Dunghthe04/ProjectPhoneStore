@@ -196,6 +196,7 @@ if(showAlert){
     },time)
 }
 
+
 //nút đóng
 const closeAlertButton=showAlert.querySelector("[close-alert]");
 if(closeAlertButton){

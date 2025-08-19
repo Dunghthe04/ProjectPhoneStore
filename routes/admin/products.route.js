@@ -10,5 +10,7 @@ router.delete('/delete/:id',productsController.delete)
 router.get('/recover',productsController.recoverProductIndex)
 router.patch('/recoverProduct/:id',productsController.recoverProduct)
 router.delete('/deletePermanently/:id',productsController.deletePermanently)
-
+//create
+router.get('/create',productsController.create)
+router.post('/create',productsController.createPost)
 module.exports=router
