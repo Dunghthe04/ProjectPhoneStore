@@ -222,6 +222,12 @@ module.exports.createPost=async(req,res)=>{
   }else{
     req.body.position=req.body.position;
   }
+  console.log(req.file);
+  
+   // lưu đường dẫn ảnh
+   req.body.thumbnail=`/upload/${req.file.filename}`
+   console.log(req.body.thumbnail);
+   
   //tạo product với thông tin trong req.body, rồi lưu vào database
   const product=new products(req.body);
   product.save();
