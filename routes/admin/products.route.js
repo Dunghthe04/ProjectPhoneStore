@@ -6,6 +6,9 @@ const storageMulter=require("../../helpers/storageMulter")
 const multer  = require('multer')
 const upload = multer({storage: storageMulter()})
 
+//validate ở middleware
+const validate=require("../../validate/admin/product.validate")
+
 router.get('/',productsController.index)
 router.patch('/change-product-status/:status/:id',productsController.changeStatusProduct)
 router.patch('/change-multi',productsController.changeMulti)
@@ -18,5 +21,6 @@ router.delete('/deletePermanently/:id',productsController.deletePermanently)
 router.get('/create',productsController.create)
 router.post('/create',
     upload.single('thumbnail'),
+    validate.createProduct,// midleware để kiểm tra dữ liệu gửi từ form lên backend
     productsController.createPost)
 module.exports=router
