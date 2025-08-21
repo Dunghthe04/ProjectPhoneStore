@@ -23,4 +23,11 @@ router.post('/create',
     upload.single('thumbnail'),
     validate.createProduct,// midleware để kiểm tra dữ liệu gửi từ form lên backend
     productsController.createPost)
+
+//edit
+router.get('/edit/:id',productsController.edit)    
+router.patch('/edit/:id',
+    upload.single('thumbnail'),
+    validate.createProduct,
+    productsController.editProduct)    
 module.exports=router
