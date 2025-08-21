@@ -187,20 +187,36 @@ if (deletePermanently.length > 0) {
 //end deletePermanently
 
 //Xử lý alert, cho chạy bao nhiêu giây -> tắt(thêm class)
-const showAlert=document.querySelector("[show-alert]");
-if(showAlert){
-    const time=parseInt(showAlert.getAttribute("data-time"));
-    setTimeout(()=>{
-      // sau 1 khoảng thời gian chạy-> ẩn đi
-      showAlert.classList.add("alert-hidden");
-    },time)
+const showAlert = document.querySelector("[show-alert]");
+if (showAlert) {
+    const time = parseInt(showAlert.getAttribute("data-time"));
+    setTimeout(() => {
+        // sau 1 khoảng thời gian chạy-> ẩn đi
+        showAlert.classList.add("alert-hidden");
+    }, time)
 }
 
 
 //nút đóng
-const closeAlertButton=showAlert.querySelector("[close-alert]");
-if(closeAlertButton){
-    closeAlertButton.addEventListener("click",()=>{
+const closeAlertButton = document.querySelector("[close-alert]");
+if (closeAlertButton) {
+    closeAlertButton.addEventListener("click", () => {
         showAlert.classList.add("alert-hidden");
     })
 }
+
+//Preview image
+const uploadImage = document.querySelector("[upload-image]");
+console.log(uploadImage);
+if (uploadImage) {
+    const inputImage = document.querySelector("[input-upload-image]");
+    const previewImage = document.querySelector("[upload-image-preview]");
+
+    inputImage.addEventListener("change", (e) => {
+        const file = e.target.files[0]; //lay ra file ng dung upload
+        if (file) {
+            previewImage.src = URL.createObjectURL(file); // taoj 1 url tam thoi roi ngan vao src
+        }
+    })
+}
+
