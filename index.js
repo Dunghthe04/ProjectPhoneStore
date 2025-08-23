@@ -29,7 +29,8 @@ app.use(bodyParser.urlencoded())
 //method_override
 app.use(methodOverride('_method'))
 //pug 
-app.set('views', './views')
+// app.set('views', './views')
+app.set('views', `${__dirname}/view`)// dùng để online or offline đều đc
 app.set('view engine', 'pug')
 //flash
 app.use(cookieParser('dsdsdsd'));
@@ -40,8 +41,8 @@ app.use(session({
 }));
 app.use(flash());
 //static file
-app.use(express.static("public"));
-
+// app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`))
 //local variable(bien naydung duoc moij file pug)
 app.locals.prefixAdmin = systemconfig.PrefixAdmin;
 clientRoute(app);
