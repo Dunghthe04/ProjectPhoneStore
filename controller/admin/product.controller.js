@@ -255,7 +255,7 @@ module.exports.edit = async (req, res) => {
       productEdit: product
     })
   } catch (error) {
-    req.flash("error","Không tìm thấy thông tin sản phẩm")
+    req.flash("error", "Không tìm thấy thông tin sản phẩm")
     res.redirect(req.get("referer"))
   }
 }
@@ -271,10 +271,34 @@ module.exports.editProduct = async (req, res) => {
     req.body.thumbnail = `/upload/${req.file.filename}`
   }
   try {
-    await products.updateOne({_id: req.params.id},req.body)
-    req.flash("success","Cập nhập sản phẩm thành công")
+    await products.updateOne({
+      _id: req.params.id
+    }, req.body)
+    req.flash("success", "Cập nhập sản phẩm thành công")
   } catch (error) {
-     req.flash("error","Không tìm thấy thông tin sản phẩm")
+    req.flash("error", "Không tìm thấy thông tin sản phẩm")
   }
   res.redirect(`${config.PrefixAdmin}/products`)
+}
+
+//detail
+module.exports.detail = async (req, res) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id
+    }
+
+    const product = await products.findOne(find)
+    console.log(product);
+    
+    
+    res.render("admin/pages/products/detail.pug", {
+      pageTitle: "Chi tiết sản phẩm",
+      product: product
+    })
+  } catch (error) {
+    req.flash("error", "Không tìm thấy thông tin sản phẩm")
+    res.redirect(req.get("referer"))
+  }
 }

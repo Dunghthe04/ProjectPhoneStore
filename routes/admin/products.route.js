@@ -29,5 +29,7 @@ router.get('/edit/:id',productsController.edit)
 router.patch('/edit/:id',
     upload.single('thumbnail'),
     validate.createProduct,
-    productsController.editProduct)    
+    productsController.editProduct)  
+//detail
+router.get('/detail/:id',productsController.detail)      
 module.exports=router
