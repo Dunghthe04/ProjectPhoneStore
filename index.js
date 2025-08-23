@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded())
 app.use(methodOverride('_method'))
 //pug 
 // app.set('views', './views')
-app.set('views', `${__dirname}/view`)// dùng để online or offline đều đc
+app.set('views', `${__dirname}/views`)// dùng để online or offline đều đc
 app.set('view engine', 'pug')
 //flash
 app.use(cookieParser('dsdsdsd'));
