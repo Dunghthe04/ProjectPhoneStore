@@ -6,9 +6,11 @@ const systemconfig = require('./config/system.js')
 //method_override(dùng để ghi đè pthuc gửi form lên)
 const methodOverride = require('method-override')
 //flash
-var flash = require('express-flash')
+const flash = require('express-flash')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+//tinymce
+const path = require('path');
 
 //body-parser(dùng để lấy dữ liệu trong req.body)
 const bodyParser = require('body-parser')
@@ -43,6 +45,10 @@ app.use(flash());
 //static file
 // app.use(express.static("public"));
 app.use(express.static(`${__dirname}/public`))
+
+//tinymce
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+
 //local variable(bien naydung duoc moij file pug)
 app.locals.prefixAdmin = systemconfig.PrefixAdmin;
 clientRoute(app);
