@@ -239,7 +239,7 @@ module.exports.createPost = async (req, res) => {
 
   //tạo product với thông tin trong req.body, rồi lưu vào database
   const product = new products(req.body);
-  product.save();
+  await product.save();
 
   req.flash("success", "Thêm 1 sản phẩm thành công")
   res.redirect(`${config.PrefixAdmin}/products`)
