@@ -32,10 +32,17 @@ module.exports.index = async (req, res) => {
     limit: 5
   }, req.query, countNumberDocuments)
 
+  //Sort
+  const sort={}
 
-  const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip).sort({
-    position: "desc"
-  })
+  //nếu có chọn sắp xếp-> sắp xếp theo lựa chọn đó
+  if(req.query.sortKey && req.query.sortValue){
+    sort[req.query.sortKey]=req.query.sortValue
+  }else{// mặc định sắp xếp vtri giảm dần
+    sort.position="desc";
+  }
+
+  const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip).sort(sort)
 
   res.render('admin/pages/products/index', {
     pageTitle: "Danh sach san pham",

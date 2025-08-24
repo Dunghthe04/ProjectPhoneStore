@@ -219,4 +219,40 @@ if (uploadImage) {
         }
     })
 }
+//SortBy option
+const sort=document.querySelector("[sort]");
+if(sort){
+    let url=new URL(window.location.href);
+    const optionSort=sort.querySelector("[sort-select]");
+    const clearSort=sort.querySelector("[sort-clear]");
 
+    optionSort.addEventListener("change",(e)=>{
+        const value=e.target.value;
+        //tách ra thành 2 phần và đẩy lên url
+        const [sortKey,sortValue]=value.split("-");
+        url.searchParams.set("sortKey",sortKey)
+        url.searchParams.set("sortValue",sortValue)
+        
+        window.location.href=url.href;
+    })
+    //clear sắp xếp
+    clearSort.addEventListener("click",()=>{
+        console.log("ok");
+        
+        url.searchParams.delete("sortKey")
+        url.searchParams.delete("sortValue")
+        window.location.href=url.href;
+    })
+    //thêm selection cho option đã chọn
+    //lấy ra giá trị trên url
+    const sortKeyUrl=url.searchParams.get("sortKey");
+    const sortValueUrl=url.searchParams.get("sortValue");
+
+    if(sortKeyUrl && sortValueUrl){
+        const stringValue=`${sortKeyUrl}-${sortValueUrl}`;
+        //duyệt từng option xem option nào có value như này thì thêm selected
+        const optionSelected=optionSort.querySelector(`option[value=${stringValue}]`);
+        optionSelected.selected=true
+    }
+
+}
