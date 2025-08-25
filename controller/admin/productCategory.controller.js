@@ -1,19 +1,28 @@
 const productCategory = require('../../models/productCategory.model')
+const treHelper=require('../../helpers/treeSelect')
 const config = require("../../config/system")
 module.exports.index =async (req, res) => {
     const find={
         deleted: false
     }
     const record=await productCategory.find(find)
+    const newRecord=treHelper.tree(record);
     res.render('admin/pages/product-category/index.pug', {
         pageTitle: "Trang danh mục sản phẩm",
-        record: record
+        newRecord: newRecord
     })
 }
 
-module.exports.create = (req, res) => {
+module.exports.create = async(req, res) => {
+    const find={
+        deleted: false
+    }
+
+    const record=await productCategory.find(find);
+    const newRecord=treHelper.tree(record);; 
     res.render('admin/pages/product-category/create.pug', {
-        pageTitle: "Trang tạo danh mục sản phẩm "
+        pageTitle: "Trang tạo danh mục sản phẩm ",
+        newRecord:newRecord
     })
 }
 
@@ -25,9 +34,6 @@ module.exports.createProductCategory = async (req, res) => {
     } else {
         req.body.position = req.body.position;
     }
-     
-
-
     //tạo product với thông tin trong req.body, rồi lưu vào database
     const product_Category = new productCategory(req.body);
     await product_Category.save();

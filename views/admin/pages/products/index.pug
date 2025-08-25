@@ -81,7 +81,7 @@ block main
            tr 
               td 
                 input(type="checkbox" name="id" value=item.id)
-              td #{index+1}
+              td #{(objectPagination.currentPage-1)*objectPagination.limit+1+index}
               td 
                   img(src=item.thumbnail
                       alt=item.title
