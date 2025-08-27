@@ -165,6 +165,20 @@ if (buttonRecover.length > 0) {
         })
     })
 }
+//recover product-category
+const btnRecoverCatgeory=document.querySelectorAll("[button-productCategory-recover]")
+if(btnRecoverCatgeory.length>0){
+    const formRecover = document.querySelector("#formRecoverCategory");
+    const path = formRecover.getAttribute("path");
+    btnRecoverCatgeory.forEach(btn=>{
+        btn.addEventListener("click",()=>{
+        const id=btn.getAttribute("data-id");
+        const action=path + `/${id}?_method=PATCH`
+        formRecover.action=action
+        formRecover.submit()
+    })
+    })
+}
 //end recover
 //deletePermanently
 const deletePermanently = document.querySelectorAll("[button-delete-permently]");
@@ -185,6 +199,21 @@ if (deletePermanently.length > 0) {
     })
 }
 //end deletePermanently
+
+//deletePermanently category
+const btndeletePermentlyCategory=document.querySelectorAll("[button-delete-productCategory-permently]")
+if(btndeletePermentlyCategory.length>0){
+    const formRecover = document.querySelector("#formDeleteCategory");
+    const path = formRecover.getAttribute("path");
+    btndeletePermentlyCategory.forEach(btn=>{
+        btn.addEventListener("click",()=>{
+        const id=btn.getAttribute("data-id");
+        const action=path + `/${id}?_method=DELETE`
+        formRecover.action=action
+        formRecover.submit()
+    })
+    })
+}
 
 //Xử lý alert, cho chạy bao nhiêu giây -> tắt(thêm class)
 const showAlert = document.querySelector("[show-alert]");
@@ -255,4 +284,22 @@ if(sort){
         optionSelected.selected=true
     }
 
+}
+
+//delete product Category
+const deletecategorybtn=document.querySelectorAll("[button-delete-catgory]")
+if(deletecategorybtn.length>0){
+    const formdelete=document.querySelector("#formDeletecatgory")
+    const path=formdelete.getAttribute("path");
+    deletecategorybtn.forEach(button=>{
+        button.addEventListener("click",()=>{
+        const isConfirm=confirm("BẠN CÓ CHẮC CHẮN MUỐN XÓA DANH MỤC SẢN PHẨM!!!")
+        if(isConfirm){
+        const id=button.getAttribute("data-id");
+        const action=`${path}/${id}?_method=PATCH`
+        formdelete.action=action;
+        formdelete.submit()
+        }
+      })
+    })
 }

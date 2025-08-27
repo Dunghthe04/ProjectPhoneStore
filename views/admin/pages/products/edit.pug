@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert
+include ../../mixins/tree
 block main 
     h1(class="mb-4") Chỉnh sửa sản phẩm 
     +alert-success(3000)
@@ -20,13 +21,23 @@ block main
             value=productEdit.title
          )
       div(class="form-group")
+         lable(for="category") Danh mục
+         select(
+           name="category"
+           id="category"
+           class="form-control"
+         ) 
+          option(value="") --Chọn danh mục--
+          if(newRecord)
+              +tree(newRecord,1,productEdit.category)   
+      div(class="form-group")
          lable(for="description") Mô tả
          textarea(
             id="description"
             name="description"
-            class="form-control"
+            class="form-control tinymce"
             rows="5"
-         ) #{productEdit.description}
+         ) !{productEdit.description}
       div(class="form-group")
          lable(for="price") Giá
          input(

@@ -3,6 +3,10 @@ var slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 const productsSchema = mongoose.Schema({
     title: String,
+    category: {
+        type: String,
+        default: ""
+    },
     description: String,
     price: Number,
     discountPercentage: Number,

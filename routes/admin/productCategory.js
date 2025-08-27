@@ -16,5 +16,16 @@ router.post('/create',
     uploadMiddleware.upload,
     validate.createProductCategory,
     productCategoryController.createProductCategory)
-
+router.get('/edit/:id',productCategoryController.edit)    
+router.post('/edit/:id',
+    upload.single('thumbnail'),
+    uploadMiddleware.upload,
+    validate.createProductCategory,
+    productCategoryController.editProductCategory)
+router.get('/detail/:id',productCategoryController.detail)    
+router.patch('/delete/:id',productCategoryController.delete) 
+//recover
+router.get('/recover', productCategoryController.recoverProducCategorytIndex)
+router.patch('/recoverProduct/:id', productCategoryController.recoverProduct)
+router.delete('/deletePermanently/:id', productCategoryController.deletePermanently)
 module.exports=router;

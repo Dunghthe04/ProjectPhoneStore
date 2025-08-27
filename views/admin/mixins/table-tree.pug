@@ -35,16 +35,16 @@ mixin table-tree(newRecord,level=1)
                       class="badge badge-danger") Dừng hoạt động   
               td 
                   a(
-                    href=`${prefixAdmin}/products/edit/${item.id}`
+                    href=`${prefixAdmin}/product-category/edit/${item.id}`
                     class="btn btn-warning btn-sm") Sửa
                   
                   button(
                     class="btn btn-danger btn-sm ml-1 "
                     data-id=item.id
-                    button-delete
+                    button-delete-catgory
                     ) Xóa    
                   a(
-                    href=`${prefixAdmin}/products/detail/${item.id}`
+                    href=`${prefixAdmin}/product-category/detail/${item.id}`
                     class="btn btn-secondary btn-sm ml-1") Chi tiết  
            if item.children && item.children.length>0
               +table-tree(item.children,level+1)

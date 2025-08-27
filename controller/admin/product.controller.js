@@ -1,4 +1,6 @@
 const products = require('../../models/product.model')
+const productCategory = require('../../models/productCategory.model')
+const treHelper = require('../../helpers/treeSelect')
 const filterHelper = require('../../helpers/FilterByStatus')
 const searchHelper = require('../../helpers/searchByKeyword')
 const paginationHelper = require('../../helpers/pagination')
@@ -33,13 +35,13 @@ module.exports.index = async (req, res) => {
   }, req.query, countNumberDocuments)
 
   //Sort
-  const sort={}
+  const sort = {}
 
   //nếu có chọn sắp xếp-> sắp xếp theo lựa chọn đó
-  if(req.query.sortKey && req.query.sortValue){
-    sort[req.query.sortKey]=req.query.sortValue
-  }else{// mặc định sắp xếp vtri giảm dần
-    sort.position="desc";
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue
+  } else { // mặc định sắp xếp vtri giảm dần
+    sort.position = "desc";
   }
 
   const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip).sort(sort)
@@ -215,8 +217,15 @@ module.exports.deletePermanently = async (req, res) => {
 
 //create product(render index)
 module.exports.create = async (req, res) => {
+  const find = {
+    deleted: false
+  }
+  const record = await productCategory.find(find)
+  const newRecord = treHelper.tree(record);
+
   res.render("admin/pages/products/create.pug", {
-    pageTitle: "Trang tạo mới sản phẩm"
+    pageTitle: "Trang tạo mới sản phẩm",
+    newRecord: newRecord
   })
 }
 
@@ -235,7 +244,7 @@ module.exports.createPost = async (req, res) => {
   }
 
   // lưu đường dẫn ảnh
- 
+
 
   //tạo product với thông tin trong req.body, rồi lưu vào database
   const product = new products(req.body);
@@ -254,10 +263,15 @@ module.exports.edit = async (req, res) => {
       _id: req.params.id
     }
     const product = await products.findOne(find);
+    const record = await productCategory.find({
+      deleted: false
+    })
+    const newRecord = treHelper.tree(record);
 
     res.render("admin/pages/products/edit.pug", {
       pageTitle: "Trang chỉnh sửa",
-      productEdit: product
+      productEdit: product,
+      newRecord:newRecord
     })
   } catch (error) {
     req.flash("error", "Không tìm thấy thông tin sản phẩm")
@@ -295,12 +309,13 @@ module.exports.detail = async (req, res) => {
     }
 
     const product = await products.findOne(find)
-    console.log(product);
-    
-    
+    const category=await productCategory.findOne({_id:product.category})
+
+
     res.render("admin/pages/products/detail.pug", {
       pageTitle: "Chi tiết sản phẩm",
-      product: product
+      product: product,
+      categoryName:category.title
     })
   } catch (error) {
     req.flash("error", "Không tìm thấy thông tin sản phẩm")
