@@ -44,41 +44,6 @@ if (buttonPagination.length > 0) {
     })
 }
 
-// check-box-multi
-const checkBoxMulti = document.querySelector("[check-box-multi]");
-if (checkBoxMulti) {
-    //lấy ra nút check all 
-    const inputCheckAll = checkBoxMulti.querySelector("input[name='checkall']");
-    //lấy ra các ô check của sp
-    const inputCheckId = checkBoxMulti.querySelectorAll("input[name='id']");
-
-    //ktra nếu ấn nút check all
-    inputCheckAll.addEventListener("click", () => {
-        //nếu là check
-        if (inputCheckAll.checked) {
-            inputCheckId.forEach(inputCheckAll => {
-                inputCheckAll.checked = true;
-            })
-        } else {
-            inputCheckId.forEach(inputCheckAll => {
-                inputCheckAll.checked = false;
-            })
-        }
-    })
-
-    //nếu click đủ nút(đếm) -> nút checkAll được chọn (đếm số lượng input được check -> so sánh nếu == inputCheckId.length -> nút checkAll check)
-    inputCheckId.forEach(input => {
-        input.addEventListener("click", () => {
-            // môi khi ấn -> check xem == số lượng ptu chua
-            const numberInputCheck = checkBoxMulti.querySelectorAll("input[name='id']:checked").length;
-            if (numberInputCheck == inputCheckId.length) {
-                inputCheckAll.checked = true;
-            } else {
-                inputCheckAll.checked = false;
-            }
-        })
-    })
-}
 
 // form-change-multi
 const formChangeMulti = document.querySelector("[form-change-multi]");
@@ -166,17 +131,17 @@ if (buttonRecover.length > 0) {
     })
 }
 //recover product-category
-const btnRecoverCatgeory=document.querySelectorAll("[button-productCategory-recover]")
-if(btnRecoverCatgeory.length>0){
+const btnRecoverCatgeory = document.querySelectorAll("[button-productCategory-recover]")
+if (btnRecoverCatgeory.length > 0) {
     const formRecover = document.querySelector("#formRecoverCategory");
     const path = formRecover.getAttribute("path");
-    btnRecoverCatgeory.forEach(btn=>{
-        btn.addEventListener("click",()=>{
-        const id=btn.getAttribute("data-id");
-        const action=path + `/${id}?_method=PATCH`
-        formRecover.action=action
-        formRecover.submit()
-    })
+    btnRecoverCatgeory.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            const action = path + `/${id}?_method=PATCH`
+            formRecover.action = action
+            formRecover.submit()
+        })
     })
 }
 //end recover
@@ -201,17 +166,17 @@ if (deletePermanently.length > 0) {
 //end deletePermanently
 
 //deletePermanently category
-const btndeletePermentlyCategory=document.querySelectorAll("[button-delete-productCategory-permently]")
-if(btndeletePermentlyCategory.length>0){
+const btndeletePermentlyCategory = document.querySelectorAll("[button-delete-productCategory-permently]")
+if (btndeletePermentlyCategory.length > 0) {
     const formRecover = document.querySelector("#formDeleteCategory");
     const path = formRecover.getAttribute("path");
-    btndeletePermentlyCategory.forEach(btn=>{
-        btn.addEventListener("click",()=>{
-        const id=btn.getAttribute("data-id");
-        const action=path + `/${id}?_method=DELETE`
-        formRecover.action=action
-        formRecover.submit()
-    })
+    btndeletePermentlyCategory.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            const action = path + `/${id}?_method=DELETE`
+            formRecover.action = action
+            formRecover.submit()
+        })
     })
 }
 
@@ -249,57 +214,146 @@ if (uploadImage) {
     })
 }
 //SortBy option
-const sort=document.querySelector("[sort]");
-if(sort){
-    let url=new URL(window.location.href);
-    const optionSort=sort.querySelector("[sort-select]");
-    const clearSort=sort.querySelector("[sort-clear]");
+const sort = document.querySelector("[sort]");
+if (sort) {
+    let url = new URL(window.location.href);
+    const optionSort = sort.querySelector("[sort-select]");
+    const clearSort = sort.querySelector("[sort-clear]");
 
-    optionSort.addEventListener("change",(e)=>{
-        const value=e.target.value;
+    optionSort.addEventListener("change", (e) => {
+        const value = e.target.value;
         //tách ra thành 2 phần và đẩy lên url
-        const [sortKey,sortValue]=value.split("-");
-        url.searchParams.set("sortKey",sortKey)
-        url.searchParams.set("sortValue",sortValue)
-        
-        window.location.href=url.href;
+        const [sortKey, sortValue] = value.split("-");
+        url.searchParams.set("sortKey", sortKey)
+        url.searchParams.set("sortValue", sortValue)
+
+        window.location.href = url.href;
     })
     //clear sắp xếp
-    clearSort.addEventListener("click",()=>{
+    clearSort.addEventListener("click", () => {
         console.log("ok");
-        
+
         url.searchParams.delete("sortKey")
         url.searchParams.delete("sortValue")
-        window.location.href=url.href;
+        window.location.href = url.href;
     })
     //thêm selection cho option đã chọn
     //lấy ra giá trị trên url
-    const sortKeyUrl=url.searchParams.get("sortKey");
-    const sortValueUrl=url.searchParams.get("sortValue");
+    const sortKeyUrl = url.searchParams.get("sortKey");
+    const sortValueUrl = url.searchParams.get("sortValue");
 
-    if(sortKeyUrl && sortValueUrl){
-        const stringValue=`${sortKeyUrl}-${sortValueUrl}`;
+    if (sortKeyUrl && sortValueUrl) {
+        const stringValue = `${sortKeyUrl}-${sortValueUrl}`;
         //duyệt từng option xem option nào có value như này thì thêm selected
-        const optionSelected=optionSort.querySelector(`option[value=${stringValue}]`);
-        optionSelected.selected=true
+        const optionSelected = optionSort.querySelector(`option[value=${stringValue}]`);
+        optionSelected.selected = true
     }
 
 }
 
 //delete product Category
-const deletecategorybtn=document.querySelectorAll("[button-delete-catgory]")
-if(deletecategorybtn.length>0){
-    const formdelete=document.querySelector("#formDeletecatgory")
-    const path=formdelete.getAttribute("path");
-    deletecategorybtn.forEach(button=>{
-        button.addEventListener("click",()=>{
-        const isConfirm=confirm("BẠN CÓ CHẮC CHẮN MUỐN XÓA DANH MỤC SẢN PHẨM!!!")
-        if(isConfirm){
-        const id=button.getAttribute("data-id");
-        const action=`${path}/${id}?_method=PATCH`
-        formdelete.action=action;
-        formdelete.submit()
-        }
-      })
+const deletecategorybtn = document.querySelectorAll("[button-delete-catgory]")
+if (deletecategorybtn.length > 0) {
+    const formdelete = document.querySelector("#formDeletecatgory")
+    const path = formdelete.getAttribute("path");
+    deletecategorybtn.forEach(button => {
+        button.addEventListener("click", () => {
+            const isConfirm = confirm("BẠN CÓ CHẮC CHẮN MUỐN XÓA DANH MỤC SẢN PHẨM!!!")
+            if (isConfirm) {
+                const id = button.getAttribute("data-id");
+                const action = `${path}/${id}?_method=PATCH`
+                formdelete.action = action;
+                formdelete.submit()
+            }
+        })
     })
 }
+
+
+//delete role
+let btnDeleteRole = document.querySelectorAll("[button-delete-role]")
+console.log(btnDeleteRole);
+
+if (btnDeleteRole.length > 0) {
+    const formDelete = document.querySelector("#formDeleteRole")
+    const path = formDelete.getAttribute("path");
+    btnDeleteRole.forEach(button => {
+        button.addEventListener("click", () => {
+            const isConfirm = confirm("Bạn có chắc chắn muốn xóa nhóm quyền!!!")
+            if (isConfirm) {
+                const id = button.getAttribute("data-id");
+                const action = `${path}/${id}?_method=PATCH`;
+                formDelete.action = action
+                formDelete.submit()
+            }
+
+        })
+    })
+}
+
+
+const btnRecoverRole = document.querySelectorAll("[button-role-recover]")
+if (btnRecoverRole.length > 0) {
+    const formRecover = document.querySelector("#formRecoverRole");
+    const path = formRecover.getAttribute("path");
+    btnRecoverRole.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            const action = path + `/${id}?_method=PATCH`
+            formRecover.action = action
+            formRecover.submit()
+        })
+    })
+}
+
+const btndeletePermentlyRole = document.querySelectorAll("[button-delete-role-permently]")
+if (btndeletePermentlyRole.length > 0) {
+    const formRecover = document.querySelector("#formDeleteRolePermently");
+    const path = formRecover.getAttribute("path");
+    btndeletePermentlyRole.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            const action = path + `/${id}?_method=DELETE`
+            formRecover.action = action
+            formRecover.submit()
+        })
+    })
+}
+
+// check-box-multi
+const checkBoxMulti = document.querySelector("[check-box-multi]");
+if (checkBoxMulti) {
+    //lấy ra nút check all 
+    const inputCheckAll = checkBoxMulti.querySelector("input[name='checkall']");
+    //lấy ra các ô check của sp
+    const inputCheckId = checkBoxMulti.querySelectorAll("input[name='id']");
+
+    //ktra nếu ấn nút check all
+    inputCheckAll.addEventListener("click", () => {
+        //nếu là check
+        if (inputCheckAll.checked) {
+            inputCheckId.forEach(inputCheckAll => {
+                inputCheckAll.checked = true;
+            })
+        } else {
+            inputCheckId.forEach(inputCheckAll => {
+                inputCheckAll.checked = false;
+            })
+        }
+    })
+
+    //nếu click đủ nút(đếm) -> nút checkAll được chọn (đếm số lượng input được check -> so sánh nếu == inputCheckId.length -> nút checkAll check)
+    inputCheckId.forEach(input => {
+        input.addEventListener("click", () => {
+            // môi khi ấn -> check xem == số lượng ptu chua
+            const numberInputCheck = checkBoxMulti.querySelectorAll("input[name='id']:checked").length;
+            if (numberInputCheck == inputCheckId.length) {
+                inputCheckAll.checked = true;
+            } else {
+                inputCheckAll.checked = false;
+            }
+        })
+    })
+}
+
+
