@@ -152,3 +152,27 @@ module.exports.deletePermanently = async (req, res) => {
     req.flash("success", `Đã xóa vĩnh viễn nhóm quyền ${id}`);
     res.redirect(req.get("referer"))
 }
+
+module.exports.permission=async(req,res)=>{
+  const find={
+    deleted: false
+  }
+
+  const role=await Role.find(find)
+  res.render("admin/pages/roles/permission.pug",{
+    pageTitle:"Trang phân quyền",
+    role:role
+  })
+}
+
+module.exports.permissionPatch=async(req,res)=>{
+  //chuyển về dạng js
+  const permission=JSON.parse(req.body.permission);
+  //duyệt qua từng ptu 1(gồm id và permission)
+  for(item of permission){
+    await Role.updateOne({_id: item.id},{permissions: item.permission})
+  }
+
+  req.flash("success","Cập nhập phân quyền thành công")
+  res.redirect(req.get("referer"))
+}

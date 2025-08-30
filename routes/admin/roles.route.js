@@ -13,4 +13,7 @@ router.get('/recover', roleController.recover)
 router.patch('/recoverRole/:id', roleController.recoverRole)
 router.delete('/deletePermanently/:id', roleController.deletePermanently)
 
+// permission
+router.get('/permission',roleController.permission)
+router.patch('/permission',roleController.permissionPatch)
 module.exports=router;
