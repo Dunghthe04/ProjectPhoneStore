@@ -4,6 +4,7 @@ const systemconfig=require('../../config/system');
 const productCategory=require('./productCategory')
 const roles=require('./roles.route')
 const accounts=require('./accounts.route')
+const auth=require('./auth.route')
 
 module.exports=(app)=>{
   const PATH_ADMIN=systemconfig.PrefixAdmin  
@@ -12,4 +13,5 @@ module.exports=(app)=>{
   app.use(`${PATH_ADMIN}/product-category`,productCategory)
   app.use(`${PATH_ADMIN}/roles`,roles)
   app.use(`${PATH_ADMIN}/accounts`,accounts)
+  app.use(`${PATH_ADMIN}/auth`,auth)
 }
