@@ -5,13 +5,14 @@ const productCategory=require('./productCategory')
 const roles=require('./roles.route')
 const accounts=require('./accounts.route')
 const auth=require('./auth.route')
+const authMiddlewrare=require('../../middleware/admin/auth.middleware')
 
 module.exports=(app)=>{
   const PATH_ADMIN=systemconfig.PrefixAdmin  
-  app.use(`${PATH_ADMIN}/dashboard`,dashBoard)
-  app.use(`${PATH_ADMIN}/products`,products)
-  app.use(`${PATH_ADMIN}/product-category`,productCategory)
-  app.use(`${PATH_ADMIN}/roles`,roles)
-  app.use(`${PATH_ADMIN}/accounts`,accounts)
+  app.use(`${PATH_ADMIN}/dashboard`,authMiddlewrare.requireAuth,dashBoard)
+  app.use(`${PATH_ADMIN}/products`,authMiddlewrare.requireAuth,products)
+  app.use(`${PATH_ADMIN}/product-category`,authMiddlewrare.requireAuth,productCategory)
+  app.use(`${PATH_ADMIN}/roles`,authMiddlewrare.requireAuth,roles)
+  app.use(`${PATH_ADMIN}/accounts`,authMiddlewrare.requireAuth,accounts)
   app.use(`${PATH_ADMIN}/auth`,auth)
 }

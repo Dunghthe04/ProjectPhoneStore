@@ -1,10 +1,16 @@
 const { PrefixAdmin } = require('../../config/system');
 const Account = require('../../models/accounts.model');
 var md5 = require('md5');
+const config = require("../../config/system")
 module.exports.login=(req,res)=>{
-    res.render('admin/pages/auth/login.pug',{
+    //ktra nếu có token -> đã đăng nhập thì ko cho đăng nhập nữa nếu ấn nhầm link
+    if(req.cookies.token){
+      res.redirect(`${config.PrefixAdmin}/dashboard`)
+    }else{
+      res.render('admin/pages/auth/login.pug',{
         pageTitle: "Trang đăng nhập"
     })
+    }
 }
 module.exports.loginPost=async(req,res)=>{
     const email=req.body.email
