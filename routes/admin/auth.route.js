@@ -6,5 +6,5 @@ router.get('/login',authController.login)
 router.post('/login',
     validate.login,
     authController.loginPost)
-
+router.get('/logout',authController.logout)
 module.exports=router;

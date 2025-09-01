@@ -37,3 +37,8 @@ module.exports.loginPost=async(req,res)=>{
     res.cookie("token",account.token);
     res.redirect(`${PrefixAdmin}/dashboard`)
 }
+
+module.exports.logout=(req,res)=>{
+    res.clearCookie("token");
+    res.redirect(`${PrefixAdmin}/auth/login`)
+}
