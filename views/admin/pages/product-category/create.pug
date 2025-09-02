@@ -2,6 +2,8 @@ extends ../../layouts/default.pug
 include ../../mixins/alert
 include ../../mixins/tree
 block main 
+   //-Nếu tài khoản có quyền thêm danh mục sản phẩm
+   if(roleAccount.permissions.includes("product-category-add"))
     h1(class="mb-4") Thêm mới danh mục sản phẩm 
     +alert-success(3000)
     +alert-error(3000)

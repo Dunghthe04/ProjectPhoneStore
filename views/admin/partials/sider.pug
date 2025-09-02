@@ -3,13 +3,23 @@
      ul 
        li 
          a(href=`${prefixAdmin}/dashboard`) Tong Quan
-       li 
-         a(href=`${prefixAdmin}/product-category`) Danh mục san pham  
-       li 
-         a(href=`${prefixAdmin}/products`) San pham
-       li 
-         a(href=`${prefixAdmin}/roles`) Nhóm quyền
-       li 
-         a(href=`${prefixAdmin}/roles/permission`) Phân quyền 
-       li 
-         a(href=`${prefixAdmin}/accounts`) Quản lý tài khoản    
+       //-nếu có quyền xem danh mục sản phẩm category mới hiện ở sider
+       if(roleAccount.permissions.includes("product-category-view"))  
+        li 
+          a(href=`${prefixAdmin}/product-category`) Danh mục san pham  
+       //-nếu có quyền xem sản phẩm category mới hiện ở sider
+       if(roleAccount.permissions.includes("product-view"))     
+        li 
+          a(href=`${prefixAdmin}/products`) San pham
+       //-nếu có quyền xem nhóm quyền mới hiện ở sider   
+       if(roleAccount.permissions.includes("role-view"))    
+        li 
+          a(href=`${prefixAdmin}/roles`) Nhóm quyền
+       //-nếu có quyền xem phân quyền mới hiện ở sider   
+       if(roleAccount.permissions.includes("role-permission"))    
+        li 
+          a(href=`${prefixAdmin}/roles/permission`) Phân quyền 
+       //-nếu có quyền xem tài khoản mới hiện ở sider      
+       if(roleAccount.permissions.includes("account-view"))    
+        li 
+          a(href=`${prefixAdmin}/accounts`) Quản lý tài khoản    

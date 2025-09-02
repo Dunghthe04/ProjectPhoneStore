@@ -2,62 +2,66 @@ extends ../../layouts/default.pug
 include ../../mixins/table-tree.pug
 include ../../mixins/alert.pug
 block main 
- h1 Danh sách nhóm quyền
-  +alert-success(3000)
-  +alert-error(3000)
-  .card.mb-3 
-   .card-header Danh sách
-    .card-body 
-     .row 
-        .col-9
-        .col-3
-          .row 
-            .col-5
-                a(
-                  href=`${prefixAdmin}/roles/create`
-                  class="btn btn-outline-success"
-                  ) + Thêm mới 
-            .col-4
-                  a(
-                    href=`${prefixAdmin}/roles/recover`
-                    class="d-flex justify-content-end"
-                  )
-                   button(class="btn btn-dark btn-sm") Xóa gần đây      
-     table(
-       class="table table-hover table-sm"
-       check-box-multi
-     )
-      thead 
-            tr 
-              th STT 
-              th Nhóm quyền
-              th Mô tả ngắn
-              th Hành động
-      tbody 
-          each item, index in roles
-           tr 
-              td #{index+1}
-              td #{item.title}
-              td !{item.description}
-              td 
-                  a(
-                    href=`${prefixAdmin}/roles/detail/${item.id}`
-                    class="btn btn-secondary btn-sm mr-1") Chi tiết  
-                  a(
-                    href=`${prefixAdmin}/roles/edit/${item.id}`
-                    class="btn btn-warning btn-sm") Sửa
-                  
-                  button(
-                    class="btn btn-danger btn-sm ml-1"
-                    data-id=item.id
-                    button-delete-role
-                    ) Xóa   
-                  
-  form(
-    action=""
-    method="POST"
-    id="formDeleteRole"
-    path=`${prefixAdmin}/roles/delete`
-  )            
-             
-  script(src="/admin/js/products.js")   
+ if(roleAccount.permissions.includes("role-view"))
+  h1 Danh sách nhóm quyền
+    +alert-success(3000)
+    +alert-error(3000)
+    .card.mb-3 
+    .card-header Danh sách
+      .card-body 
+      .row 
+          .col-9
+          .col-3
+            .row 
+              .col-5
+                  if(roleAccount.permissions.includes("role-add"))
+                    a(
+                      href=`${prefixAdmin}/roles/create`
+                      class="btn btn-outline-success"
+                      ) + Thêm mới 
+              .col-4
+                    if(roleAccount.permissions.includes("role-delete"))
+                      a(
+                        href=`${prefixAdmin}/roles/recover`
+                        class="d-flex justify-content-end"
+                      )
+                      button(class="btn btn-dark btn-sm") Xóa gần đây      
+      table(
+        class="table table-hover table-sm"
+        check-box-multi
+      )
+        thead 
+              tr 
+                th STT 
+                th Nhóm quyền
+                th Mô tả ngắn
+                th Hành động
+        tbody 
+            each item, index in roles
+              tr 
+                td #{index+1}
+                td #{item.title}
+                td !{item.description}
+                td 
+                    a(
+                      href=`${prefixAdmin}/roles/detail/${item.id}`
+                      class="btn btn-secondary btn-sm mr-1") Chi tiết  
+                    if(roleAccount.permissions.includes("role-edit"))
+                      a(
+                        href=`${prefixAdmin}/roles/edit/${item.id}`
+                        class="btn btn-warning btn-sm") Sửa
+                    if(roleAccount.permissions.includes("role-delete"))
+                      button(
+                        class="btn btn-danger btn-sm ml-1"
+                        data-id=item.id
+                        button-delete-role
+                        ) Xóa   
+                    
+    form(
+      action=""
+      method="POST"
+      id="formDeleteRole"
+      path=`${prefixAdmin}/roles/delete`
+    )            
+              
+    script(src="/admin/js/products.js")   

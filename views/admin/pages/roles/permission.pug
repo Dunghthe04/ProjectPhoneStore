@@ -2,6 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/table-tree.pug
 include ../../mixins/alert.pug
 block main
+  if(roleAccount.permissions.includes("role-permission"))
     +alert-success(3000)
     h1(class="mb-4") Phân quyền 
     //-Để js lấy đc dữ liệu làm xanh nút
@@ -107,7 +108,31 @@ block main
           td Phân quyền 
           each item in role
              td(class="text-center")
-              input(type="checkbox")                   
+              input(type="checkbox") 
+        //-Account
+        tr 
+          td(colspan="4")
+            b Tài khoản
+        tr(data-name="account-view")
+          td Xem 
+          each item in role
+             td(class="text-center")
+              input(type="checkbox") 
+        tr(data-name="account-add")
+          td Thêm mới 
+          each item in role
+             td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="account-edit")
+          td Chỉnh sửa 
+          each item in role
+             td(class="text-center")
+              input(type="checkbox")
+        tr(data-name="account-delete")
+          td Xóa 
+          each item in role
+             td(class="text-center")
+              input(type="checkbox")                         
     form(
       method="POST"
       action=`${prefixAdmin}/roles/permission?_method=PATCH`

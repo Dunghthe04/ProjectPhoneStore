@@ -5,72 +5,75 @@ include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
 block main 
- h1 Danh sach nhóm quyền bị xóa
-  +alert-success(3000)
-  .card.mb-3 
-   .card-header Bộ lọc và tìm kiếm 
-   .card-body 
-    .row 
-      .col-7 
-         //-Tối ưu filter button
-         +filterButton(filterButtons)
-      .col-5 
-         //-Tối ưu searchByKeyword
-         +searchByKeyword(keywordSearch)
-
-  .card.mb-3 
-   .card-header Danh sách sản phẩm
+ if(roleAccount.permissions.includes("role-delete"))
+  h1 Danh sach nhóm quyền bị xóa
+    +alert-success(3000)
+    .card.mb-3 
+    .card-header Bộ lọc và tìm kiếm 
     .card-body 
-     .row 
-        .col-6
-            +formChangeMulti(`${prefixAdmin}/products/change-multi?_method=PATCH`)  
-        .col-6 
-            a(
-              href=`${prefixAdmin}/roles`
-              class="d-flex justify-content-end"
-            )
-             button(class="btn btn-dark btn-sm") Quay trở lại danh sách nhóm quyền
-     table(
-       class="table table-hover table-sm"
-       check-box-multi
-     )
-      thead 
+      .row 
+        .col-7 
+          //-Tối ưu filter button
+          +filterButton(filterButtons)
+        .col-5 
+          //-Tối ưu searchByKeyword
+          +searchByKeyword(keywordSearch)
+
+    .card.mb-3 
+    .card-header Danh sách sản phẩm
+      .card-body 
+      .row 
+          .col-6
+              if(roleAccount.permissions.includes("role-edit"))
+               +formChangeMulti(`${prefixAdmin}/products/change-multi?_method=PATCH`)  
+          .col-6 
+              a(
+                href=`${prefixAdmin}/roles`
+                class="d-flex justify-content-end"
+              )
+              button(class="btn btn-dark btn-sm") Quay trở lại danh sách nhóm quyền
+      table(
+        class="table table-hover table-sm"
+        check-box-multi
+      )
+        thead 
+              tr 
+                th STT 
+                th Tiêu đề
+                th Mô tả 
+                th Hành động
+        tbody 
+            each item, index in roleList
             tr 
-              th STT 
-              th Tiêu đề
-              th Mô tả 
-              th Hành động
-      tbody 
-          each item, index in roleList
-           tr 
-              td #{index+1}
-              td #{item.title}
-              td !{item.description}
-              td 
-                  button(
-                    class="btn btn-warning btn-sm"
-                    data-id=item.id
-                    button-role-recover
-                    ) Phục hồi
-                  button(
-                    class="btn btn-danger btn-sm ml-1"
-                    data-id=item.id
-                    button-delete-role-permently
-                    ) Xóa vĩnh viễn     
-  //-Tối ưu pagination
-  +pagination(objectPagination)    
+                td #{index+1}
+                td #{item.title}
+                td !{item.description}
+                td 
+                   if(roleAccount.permissions.includes("role-delete"))
+                    button(
+                      class="btn btn-warning btn-sm"
+                      data-id=item.id
+                      button-role-recover
+                      ) Phục hồi
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      data-id=item.id
+                      button-delete-role-permently
+                      ) Xóa vĩnh viễn     
+    //-Tối ưu pagination
+    +pagination(objectPagination)    
 
-  form(
-    action=""
-    method="Post"
-    id="formRecoverRole"
-    path=`${prefixAdmin}/roles/recoverRole`
-  )
+    form(
+      action=""
+      method="Post"
+      id="formRecoverRole"
+      path=`${prefixAdmin}/roles/recoverRole`
+    )
 
-  form(
-    action=""
-    method="POST"
-    id="formDeleteRolePermently"
-    path=`${prefixAdmin}/roles/deletePermanently`
-  )
-  script(src="/admin/js/products.js")                    
+    form(
+      action=""
+      method="POST"
+      id="formDeleteRolePermently"
+      path=`${prefixAdmin}/roles/deletePermanently`
+    )
+    script(src="/admin/js/products.js")                    

@@ -2,6 +2,8 @@ extends ../../layouts/default.pug
 include ../../mixins/alert
 include ../../mixins/tree
 block main 
+   //-nếu tài khoản có quyền edit-> hiện
+   if(roleAccount.permissions.includes("account-edit"))
     h1(class="mb-4") Chỉnh sửa tài khoản 
     +alert-success(3000)
     +alert-error(3000)

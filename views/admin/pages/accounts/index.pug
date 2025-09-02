@@ -1,6 +1,8 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 block main 
+  //-nếu có quyền xem -> mới hiện
+  if(roleAccount.permissions.includes("account-view"))
    h1(class="mb-4") Danh sách tài khoản 
    +alert-success(3000)
    +alert-error(3000)
@@ -10,6 +12,7 @@ block main
      .row 
         .col-8
         .col-4
+         if(roleAccount.permissions.includes("account-add"))
           a(
             href=`${prefixAdmin}/accounts/create`
             class="btn btn-outline-success"
@@ -41,6 +44,8 @@ block main
               td #{item.role.title}
               td #{item.email}
               td 
+                 //-nếu có quyền edit -> mới hiện
+                 if(roleAccount.permissions.includes("account-edit"))
                   if(item.status=="active")
                       a(href="javascript:;"
                         data-status=item.status
@@ -54,15 +59,16 @@ block main
                       button-change-status
                       class="badge badge-danger") Dừng hoạt động   
               td 
-                  a(
-                    href=`${prefixAdmin}/accounts/edit/${item.id}`
-                    class="btn btn-warning btn-sm") Sửa
-                  
-                  button(
-                    class="btn btn-danger btn-sm ml-1 "
-                    data-id=item.id
-                    button-delete-catgory
-                    ) Xóa    
+                  if(roleAccount.permissions.includes("account-edit"))
+                    a(
+                      href=`${prefixAdmin}/accounts/edit/${item.id}`
+                      class="btn btn-warning btn-sm") Sửa
+                  if(roleAccount.permissions.includes("account-delete"))
+                    button(
+                      class="btn btn-danger btn-sm ml-1 "
+                      data-id=item.id
+                      button-delete-catgory
+                      ) Xóa    
                   a(
                     href=`${prefixAdmin}/product-category/detail/${item.id}`
                     class="btn btn-secondary btn-sm ml-1") Chi tiết   
