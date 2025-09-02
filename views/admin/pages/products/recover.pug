@@ -4,6 +4,7 @@ include ../../mixins/searchByKeyword.pug
 include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 block main 
  if(roleAccount.permissions.includes("product-delete"))
   h1 Danh sach san pham bị xóa
@@ -32,7 +33,7 @@ block main
                 href=`${prefixAdmin}/products`
                 class="d-flex justify-content-end"
               )
-              button(class="btn btn-dark btn-sm") Quay trở lại danh sách sản phẩm
+               button(class="btn btn-dark btn-sm") Quay trở lại danh sách sản phẩm
       table(
         class="table table-hover table-sm"
         check-box-multi
@@ -46,10 +47,11 @@ block main
                 th Tiêu đề
                 th Giá
                 th Trạng thái 
+                th Người xóa 
                 th Hành động
         tbody 
             each item, index in products
-            tr 
+              tr 
                 td 
                   input(type="checkbox" name="id" value=item.id)
                 td #{index+1}
@@ -74,7 +76,10 @@ block main
                         data-status=item.status
                         data-id=item.id
                         button-change-status
-                        class="badge badge-danger") Dừng hoạt động   
+                        class="badge badge-danger") Dừng hoạt động  
+                td 
+                  p #{item.deleter}
+                  +formatDateTime(item.deletedBy.deletedDate)
                 td 
                   if(roleAccount.permissions.includes("product-delete"))
                     button(

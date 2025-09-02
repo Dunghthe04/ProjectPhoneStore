@@ -112,7 +112,11 @@ module.exports.changeMulti = async (req, res) => {
         }
       }, {
         deleted: true,
-        deletedAt: new Date()
+        // deletedAt: new Date()
+        deletedBy:{
+          account_id: res.locals.account.id,
+          deletedDate: Date.now()
+        }
       })
       req.flash("success", `Xóa thành công ${productsIdChange.length} sản phẩm`);
       break;
@@ -155,7 +159,11 @@ module.exports.delete = async (req, res) => {
     _id: productId
   }, {
     deleted: true,
-    deletedAt: new Date()
+    // deletedAt: new Date()
+    deletedBy:{
+      account_id: res.locals.account.id,
+      deletedDate: Date.now()
+    }
   });
   req.flash("success", `Xóa thành công sản phẩm ${productId}`);
   res.redirect(req.get("referer"))
@@ -190,6 +198,13 @@ module.exports.recoverProductIndex = async (req, res) => {
 
 
   const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip)
+
+  for(let item of productList){
+    const account=await Account.findOne({_id:item.deletedBy.account_id})
+    if(account){
+      item.deleter=account.fullname
+    }
+  }
 
   res.render('admin/pages/products/recover.pug', {
     pageTitle: "Xóa gần đây",
