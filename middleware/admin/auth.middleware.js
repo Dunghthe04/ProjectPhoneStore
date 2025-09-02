@@ -15,8 +15,6 @@ module.exports.requireAuth=async(req,res,next)=>{
         }else{
             //nếu thỏa mãn -> trả về thông tin user và các quyền của tài khoản đó để check authen
             const role=await Role.findOne({_id: account.role_id})
-            console.log(role);
-            
             res.locals.account=account;
             res.locals.roleAccount=role;
             next();

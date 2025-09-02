@@ -9,6 +9,8 @@ const methodOverride = require('method-override')
 const flash = require('express-flash')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+//moment
+const moment = require('moment');
 //tinymce
 const path = require('path');
 
@@ -51,6 +53,7 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 
 //local variable(bien naydung duoc moij file pug)
 app.locals.prefixAdmin = systemconfig.PrefixAdmin;
+app.locals.moment = moment;
 clientRoute(app);
 adminRoute(app);
 

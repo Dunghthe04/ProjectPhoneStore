@@ -1,4 +1,5 @@
 const products = require('../../models/product.model')
+const Account = require('../../models/accounts.model')
 const productCategory = require('../../models/productCategory.model')
 const treHelper = require('../../helpers/treeSelect')
 const filterHelper = require('../../helpers/FilterByStatus')
@@ -45,7 +46,14 @@ module.exports.index = async (req, res) => {
   }
 
   const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip).sort(sort)
-
+  
+  //thêm tên người tạo
+  for(let product of productList){
+    const account=await Account.findOne({_id: product.createBy.account_id})
+    if(account){
+      product.creater=account.fullname
+    }
+  }
   res.render('admin/pages/products/index', {
     pageTitle: "Danh sach san pham",
     products: productList,
@@ -217,6 +225,7 @@ module.exports.deletePermanently = async (req, res) => {
 
 //create product(render index)
 module.exports.create = async (req, res) => {
+  
   const find = {
     deleted: false
   }
@@ -231,6 +240,8 @@ module.exports.create = async (req, res) => {
 
 //Create product post
 module.exports.createPost = async (req, res) => {
+  console.log("account-------------------",res.locals.account);
+  
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -242,8 +253,11 @@ module.exports.createPost = async (req, res) => {
   } else {
     req.body.position = req.body.position;
   }
-
-  // lưu đường dẫn ảnh
+  
+  req.body.createBy={
+    account_id: res.locals.account.id,
+  }
+  
 
 
   //tạo product với thông tin trong req.body, rồi lưu vào database

@@ -4,6 +4,7 @@ include ../../mixins/searchByKeyword.pug
 include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 block main 
  if(roleAccount.permissions.includes("product-view"))
   h1 Danh sach san pham
@@ -80,10 +81,11 @@ block main
                 th Giá
                 th Vị trí
                 th Trạng thái 
+                th Người tạo
                 th Hành động
         tbody 
             each item, index in products
-            tr 
+              tr 
                 td 
                   input(type="checkbox" name="id" value=item.id)
                 td #{(objectPagination.currentPage-1)*objectPagination.limit+1+index}
@@ -103,6 +105,7 @@ block main
                     min="1"
                     name="position"
                   )
+                
                 td 
                   if(roleAccount.permissions.includes("product-edit"))
                     if(item.status=="active")
@@ -117,6 +120,9 @@ block main
                         data-id=item.id
                         button-change-status
                         class="badge badge-danger") Dừng hoạt động   
+                td 
+                  p #{item.creater} 
+                  +formatDateTime(item.createBy.createAt)       
                 td 
                     if(roleAccount.permissions.includes("product-edit"))
                       a(
