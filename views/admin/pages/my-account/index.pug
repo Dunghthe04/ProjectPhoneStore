@@ -1,0 +1,31 @@
+extends ../../layouts/default.pug
+block main 
+  h1(class="mb-4") Thông tin cá nhân
+  if(account.avatar)
+    img(
+        src=account.avatar
+        width: 150px
+        class="mb-3"
+      )
+  else 
+    img(
+        src="/admin/images/avatar.png"
+        width: 150px
+        class="mb-3"
+      )    
+  if(account.fullname)
+    div(class="mb-4") Họ tên: <b>#{account.fullname}</b>
+  if(account.email)
+    div(class="mb-4") Email: <b>#{account.email}</b>
+  if(account.phone)
+    div(class="mb-4") Số điện thoại <b>#{account.phone}</b>
+  if(account.status)
+    div(class="mb-4") Trạng thái: <b>#{account.status}</b>
+  if(roleAccount.title)  
+    div(class="mb-4") Phân quyền: <b>#{roleAccount.title} </b>
+  a(
+    href=`${prefixAdmin}/my-account/edit`
+    class="btn btn-warning btn-sm") Chỉnh sửa thông tin 
+  script(src="/admin/js/product.js")       
+
+  
