@@ -46,14 +46,34 @@ module.exports.index = async (req, res) => {
   }
 
   const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip).sort(sort)
-  
-  //thêm tên người tạo
-  for(let product of productList){
-    const account=await Account.findOne({_id: product.createBy.account_id})
-    if(account){
-      product.creater=account.fullname
+
+
+  for (let product of productList) {
+    //Lấy ra người tạo
+    const account = await Account.findOne({
+      _id: product.createBy.account_id
+    })
+    if (account) {
+      product.creater = account.fullname
     }
+
+    //Lấy ra người chỉnh sửa gần nhất
+    const currentlyeEdit = product.updateBy.slice(-1)[0];
+    if (currentlyeEdit) {
+      //lấy ra tài khoản
+      const accountEditer = await Account.findOne({
+        _id: currentlyeEdit.account_id
+      })
+      if (accountEditer) {
+        //gán thêm 1 tt vào object updateBy = tên tk
+        currentlyeEdit.fullnameEditer=accountEditer.fullname;
+      }
+    }
+
   }
+
+  //thêm người cập nhập
+
   res.render('admin/pages/products/index', {
     pageTitle: "Danh sach san pham",
     products: productList,
@@ -67,10 +87,17 @@ module.exports.changeStatusProduct = async (req, res) => {
   //lấy ra id product, và status muốn cập nhập
   const status = req.params.status;
   const id = req.params.id;
+  const updateBy = {
+    account_id: res.locals.account.id,
+    updatedate: Date.now()
+  }
   await products.updateOne({
     _id: id
   }, {
-    status: status
+    status: status,
+    $push: {
+      updateBy: updateBy
+    }
   })
   req.flash("success", "Thay đổi trạng thái thành công");
 
@@ -85,12 +112,19 @@ module.exports.changeMulti = async (req, res) => {
 
   switch (type) {
     case 'active':
+      const updateBy = {
+        account_id: res.locals.account.id,
+        updatedate: Date.now()
+      }
       await products.updateMany({
         _id: {
           $in: productsIdChange
         }
       }, {
-        status: type
+        status: type,
+        $push: {
+          updateBy: updateBy
+        }
       })
       req.flash("success", `Thay đổi thành công ${productsIdChange.length} sản phẩm`);
       break;
@@ -100,7 +134,10 @@ module.exports.changeMulti = async (req, res) => {
           $in: productsIdChange
         }
       }, {
-        status: type
+        status: type,
+        $push: {
+          updateBy: updateBy
+        }
       })
       req.flash("success", `Thay đổi thành công ${productsIdChange.length} sản phẩm`);
       break;
@@ -113,7 +150,7 @@ module.exports.changeMulti = async (req, res) => {
       }, {
         deleted: true,
         // deletedAt: new Date()
-        deletedBy:{
+        deletedBy: {
           account_id: res.locals.account.id,
           deletedDate: Date.now()
         }
@@ -160,7 +197,7 @@ module.exports.delete = async (req, res) => {
   }, {
     deleted: true,
     // deletedAt: new Date()
-    deletedBy:{
+    deletedBy: {
       account_id: res.locals.account.id,
       deletedDate: Date.now()
     }
@@ -199,10 +236,12 @@ module.exports.recoverProductIndex = async (req, res) => {
 
   const productList = await products.find(find).limit(objectPagination.limit).skip(objectPagination.skip)
 
-  for(let item of productList){
-    const account=await Account.findOne({_id:item.deletedBy.account_id})
-    if(account){
-      item.deleter=account.fullname
+  for (let item of productList) {
+    const account = await Account.findOne({
+      _id: item.deletedBy.account_id
+    })
+    if (account) {
+      item.deleter = account.fullname
     }
   }
 
@@ -240,7 +279,7 @@ module.exports.deletePermanently = async (req, res) => {
 
 //create product(render index)
 module.exports.create = async (req, res) => {
-  
+
   const find = {
     deleted: false
   }
@@ -255,8 +294,8 @@ module.exports.create = async (req, res) => {
 
 //Create product post
 module.exports.createPost = async (req, res) => {
-  console.log("account-------------------",res.locals.account);
-  
+  console.log("account-------------------", res.locals.account);
+
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -268,11 +307,11 @@ module.exports.createPost = async (req, res) => {
   } else {
     req.body.position = req.body.position;
   }
-  
-  req.body.createBy={
+
+  req.body.createBy = {
     account_id: res.locals.account.id,
   }
-  
+
 
 
   //tạo product với thông tin trong req.body, rồi lưu vào database
@@ -300,7 +339,7 @@ module.exports.edit = async (req, res) => {
     res.render("admin/pages/products/edit.pug", {
       pageTitle: "Trang chỉnh sửa",
       productEdit: product,
-      newRecord:newRecord
+      newRecord: newRecord
     })
   } catch (error) {
     req.flash("error", "Không tìm thấy thông tin sản phẩm")
@@ -318,10 +357,22 @@ module.exports.editProduct = async (req, res) => {
   if (req.file) {
     req.body.thumbnail = `/upload/${req.file.filename}`
   }
+
+  //lưu thêm người chỉnh sửa
+  const updateBy = {
+    account_id: res.locals.account.id,
+    updatedate: Date.now()
+  }
+  
   try {
     await products.updateOne({
       _id: req.params.id
-    }, req.body)
+    }, {
+      ...req.body,
+      $push: {
+        updateBy: updateBy
+      }
+    })
     req.flash("success", "Cập nhập sản phẩm thành công")
   } catch (error) {
     req.flash("error", "Không tìm thấy thông tin sản phẩm")
@@ -338,13 +389,15 @@ module.exports.detail = async (req, res) => {
     }
 
     const product = await products.findOne(find)
-    const category=await productCategory.findOne({_id:product.category})
+    const category = await productCategory.findOne({
+      _id: product.category
+    })
 
 
     res.render("admin/pages/products/detail.pug", {
       pageTitle: "Chi tiết sản phẩm",
       product: product,
-      categoryName:category.title
+      categoryName: category.title
     })
   } catch (error) {
     req.flash("error", "Không tìm thấy thông tin sản phẩm")

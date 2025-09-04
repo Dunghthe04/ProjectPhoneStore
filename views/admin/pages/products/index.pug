@@ -82,6 +82,7 @@ block main
                 th Vị trí
                 th Trạng thái 
                 th Người tạo
+                th Người chỉnh sửa gần nhất
                 th Hành động
         tbody 
             each item, index in products
@@ -122,7 +123,12 @@ block main
                         class="badge badge-danger") Dừng hoạt động   
                 td 
                   p #{item.creater} 
-                  +formatDateTime(item.createBy.createAt)       
+                  +formatDateTime(item.createBy.createAt) 
+                td 
+                  - const updateByCurrently=item.updateBy.slice(-1)[0]
+                  if(updateByCurrently)
+                    p #{updateByCurrently.fullnameEditer} 
+                    +formatDateTime(item.updateBy.updateDate) 
                 td 
                     if(roleAccount.permissions.includes("product-edit"))
                       a(
