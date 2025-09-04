@@ -12,7 +12,7 @@ block main
         class="form-create-prouct"
         enctype="multipart/form-data"
     )
-      div(class="form-group")
+      div(class="form-group mb-3")
          lable(for="title") Tiêu đề
          input(
             id="title"
@@ -21,7 +21,28 @@ block main
             class="form-control"
             value=productEdit.title
          )
-      div(class="form-group")
+      div(class="fom-group form-check form-check-inline")
+         input(
+            type="radio"
+            class="form-check-input"
+            id="featured1"
+            name="featured"
+            value="1"
+            checked=(productEdit.featured=="1"?true:false)
+         )
+         label(for="featured1" class="form-check-label") Nổi bật
+      div(class="fom-group form-check form-check-inline")
+         input(
+            type="radio"
+            class="form-check-input"
+            id="featured0"
+            name="featured"
+            value="0"
+            checked=(productEdit.featured=="0"?true:false)
+         )
+         label(for="featured0" class="form-check-label") Không  
+
+      div(class="form-group mt-3")
          lable(for="category") Danh mục
          select(
            name="category"
