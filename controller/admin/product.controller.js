@@ -53,12 +53,14 @@ module.exports.index = async (req, res) => {
       const account = await Account.findOne({
         _id: product.createBy.account_id
       })
+
       if (account) {
         product.creater = account.fullname
       }
 
       //Lấy ra người chỉnh sửa gần nhất
       const currentlyeEdit = product.updateBy.slice(-1)[0];
+      
       if (currentlyeEdit) {
         //lấy ra tài khoản
         const accountEditer = await Account.findOne({
@@ -309,7 +311,7 @@ module.exports.deletePermanently = async (req, res) => {
 
 //create product(render index)
 module.exports.create = async (req, res) => {
-  if (res.locals.roleAccount.permissions.includes("product-create")) {
+  if (res.locals.roleAccount.permissions.includes("product-add")) {
     const find = {
       deleted: false
     }
@@ -328,7 +330,7 @@ module.exports.create = async (req, res) => {
 
 //Create product post
 module.exports.createPost = async (req, res) => {
-  if (res.locals.roleAccount.permissions.includes("product-create")) {
+  if (res.locals.roleAccount.permissions.includes("product-add")) {
     req.body.price = parseInt(req.body.price);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
     req.body.stock = parseInt(req.body.stock);
