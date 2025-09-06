@@ -31,7 +31,7 @@ block main
                 href=`${prefixAdmin}/product-category`
                 class="d-flex justify-content-end"
               )
-              button(class="btn btn-dark btn-sm") Quay trở lại danh sách danh mục sản phẩm
+               button(class="btn btn-dark btn-sm") Quay trở lại danh sách danh mục sản phẩm
       table(
         class="table table-hover table-sm"
         check-box-multi
@@ -47,7 +47,7 @@ block main
                 th Hành động
         tbody 
             each item, index in productCategoryList
-            tr 
+             tr 
                 td 
                   input(type="checkbox" name="id" value=item.id)
                 td #{index+1}
