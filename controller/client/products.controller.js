@@ -1,4 +1,6 @@
 const Product=require('../../models/product.model')
+const ProductCategory=require('../../models/productCategory.model')
+const getSubcategoryHelpers=require('../../helpers/GetSubCategoryByParrentId')
 //index
 module.exports.index=async(req,res)=>{
     const products=await Product.find({
@@ -34,6 +36,40 @@ module.exports.detail=async(req,res)=>{
         }else{
           res.redirect("/products")
         }
+    } catch (error) {
+        res.redirect("/products")
+    }
+}
+
+//lấy tất cả sản phẩm dựa trên category
+module.exports.categoryfilter=async(req,res)=>{
+    try {
+      const slugCategory=req.params.slugCategory;
+      console.log(slugCategory);
+      
+       //lấy ra categoryId dựa trên slugcategory
+       const category=await ProductCategory.findOne({deleted: false, slug: slugCategory, status: "active"})
+       const categoryId=category.id;
+
+       //lấy ra các sản phẩm dựa trên categoryId đó, và lấy cả các sản phẩm bên trong danh mục con-con con của nó nữa
+       //vd : điện thoại -> lấy all sản phẩm của cả iphone(danh mục iphone) va cả samsumg(dmuc: sámung)
+       //lấy ra mảng categoryCon dựa trên categiory ng dùng bấm
+       const subCategory=await getSubcategoryHelpers.getSubcategory(categoryId);
+       console.log(subCategory);
+       
+       //lấy ra mảng id của categiorycon đó
+       const subcategoryid=subCategory.map(sub=>sub.id)
+
+       //giờ lấy sản phẩm dựa trên category ng dùng chọn, và các product của category con của nó: vd điện thoại -> thì lấy all sp của cả iphone, ss,..
+       const productByCategory=await Product.find({
+        deleted: false,
+        status:"active", 
+        category:{$in : [categoryId,...subcategoryid]} })
+ 
+        res.render("client/pages/products/index",{
+        pageTitle: category.title,
+        products: productByCategory 
+    })
     } catch (error) {
         res.redirect("/products")
     }

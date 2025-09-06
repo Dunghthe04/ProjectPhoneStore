@@ -4,4 +4,6 @@ const productsController=require("../../controller/client/products.controller")
 
 router.get('/',productsController.index)
 router.get('/detail/:slug',productsController.detail)
+// tìm kiếm theo danh mục
+router.get('/:slugCategory',productsController.categoryfilter)
 module.exports=router
