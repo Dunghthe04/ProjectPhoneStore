@@ -1,0 +1,12 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/product-list-layout.pug
+block main 
+  .container.my-3 
+    .row 
+      .col-12 
+        +box-head(`${pageTitle} ${keyword}`)
+    if(products.length>0)    
+        +product-list-layout(products)
+    else 
+       h3(class="text-center") Không sản phẩm nào thỏa mãn    
