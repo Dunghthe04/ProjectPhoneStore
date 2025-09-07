@@ -181,3 +181,48 @@ height: 100%;
     padding: 3px 6px;
     border-radius: 8px;
 }
+/* css alert */
+[show-alert]{
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    z-index: 9999;
+}
+[show-alert].alert-hidden{
+    animation-name: alert-hidden;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+@keyframes alert-hidden{
+    from{
+        right: 15px;
+    }
+    to{
+       right: -100%;
+       display: none; 
+    }
+}
+
+[show-alert] [close-alert]{
+    background-color: #ffffff;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    list-style: 24px;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.uploadPreview{
+    width: 300px;
+    height: auto;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+}
+.uploadPreview[src=""]{
+  display: none;
+}

@@ -20,12 +20,12 @@ block main
         if(product.discountPercentage)
             div(class="inner-percent") Giảm tới: <span>#{product.discountPercentage}$</span>
         if(product.stock)
-            div(class="inner-stock") Còn lại <span>#{product.stock}$</span> sản phẩm
+            div(class="inner-stock") Còn lại <span>#{product.stock} </span> sản phẩm
         if(product.position)  
                 div(class="mb-4") Vị trí: #{product.position} 
         
         form(
-          action=`cart/add/${product.id}`
+          action=`/cart/add/${product.id}`
           method="POST"
         )
            input(
