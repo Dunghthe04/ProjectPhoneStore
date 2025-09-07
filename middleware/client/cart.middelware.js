@@ -9,6 +9,14 @@ module.exports.cart=async(req,res,next)=>{
 
     const expiredTime=1000*60*60*24*365
     res.cookie("cartId",cart.id,{ expires: new Date(Date.now() + expiredTime) })
+  }else{
+    //nếu có cart rồi lấy ra thôi
+    const cartId=req.cookies.cartId;
+    const cart=await Cart.findOne({_id: cartId})
+    const numberProductInCart=cart.products.reduce((count,item)=>count+item.quantity,0)
+    cart.quantityProduct= numberProductInCart  
+
+    res.locals.cart=cart
   }
   next();
 }
