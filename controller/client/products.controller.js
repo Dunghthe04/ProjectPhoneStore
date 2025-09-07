@@ -72,7 +72,6 @@ module.exports.categoryfilter = async (req, res) => {
     //vd : điện thoại -> lấy all sản phẩm của cả iphone(danh mục iphone) va cả samsumg(dmuc: sámung)
     //lấy ra mảng categoryCon dựa trên categiory ng dùng bấm
     const subCategory = await getSubcategoryHelpers.getSubcategory(categoryId);
-    console.log(subCategory);
 
     //lấy ra mảng id của categiorycon đó
     const subcategoryid = subCategory.map(sub => sub.id)
@@ -86,6 +85,9 @@ module.exports.categoryfilter = async (req, res) => {
       }
     })
 
+    for(let product of productByCategory){
+       product.newPrice= getNewPriceHelper.newPrice(product);
+    }
     res.render("client/pages/products/index", {
       pageTitle: category.title,
       products: productByCategory
