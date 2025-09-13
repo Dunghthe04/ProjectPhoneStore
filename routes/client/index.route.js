@@ -6,12 +6,15 @@ const routeCheckout=require('./checkout.route')
 const userCheckout=require('./user.route')
 const middlewareProductcategory=require('../../middleware/client/product-category.middleware')
 const middlewareCart=require('../../middleware/client/cart.middelware')
+const middlewareInforUser=require('../../middleware/client/user.middleware')
 
 module.exports=(app)=>{
   //thêm middleware để các trang kế thừa đc defaut*vì default cần productCategory)
   app.use(middlewareProductcategory.productcategory)// tất cả route đều qua middleware này
   //thêm middleware cartId cho tất cả trang client
   app.use(middlewareCart.cart)
+  //thêm middleware inforuser, vì nó nằm trên header
+  app.use(middlewareInforUser.inforUser)
   app.use('/',routeHome)
   app.use('/cart',routeCart)
   app.use('/products',routeproducts)

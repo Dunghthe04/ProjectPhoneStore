@@ -5,4 +5,6 @@ const registerValidate=require('../../validate/client/register.validate')
 
 router.get('/register',userController.register)
 router.post('/register',registerValidate.register,userController.registerPost)
+router.get('/login',userController.login)
+router.post('/login',registerValidate.login,userController.loginPost)
 module.exports=router
