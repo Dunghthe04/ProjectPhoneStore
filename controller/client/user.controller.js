@@ -50,3 +50,7 @@ module.exports.loginPost=async(req,res)=>{
     res.cookie("userToken",user.userToken);
     res.redirect("/")
 }
+module.exports.logout=async(req,res)=>{
+    res.clearCookie("userToken");
+    res.redirect("/user/login")
+}

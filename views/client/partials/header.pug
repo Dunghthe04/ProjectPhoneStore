@@ -37,7 +37,12 @@ header.header
              li
                //-nếu chưa có giỏ hàng -> in o, nếu có r-> in số lg
                a(href="/cart") Giỏ hàng(#{cart.quantityProduct? cart.quantityProduct:0})
-             li
-               a(href="/user/register") Đăng ký     
-             li
-               a(href="/user/login") Đăng nhập     
+             //-nếu có user thì hiện đăng xuất
+             if(user)    
+               li
+                a(href="/user/logout") Đăng xuất   
+             else 
+               li
+                a(href="/user/register") Đăng ký     
+               li
+                a(href="/user/login") Đăng nhập 
