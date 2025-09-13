@@ -3,6 +3,7 @@ const routeproducts=require('./products.route')
 const routeSearch=require('./search.route')
 const routeCart=require('./cart.route')
 const routeCheckout=require('./checkout.route')
+const userCheckout=require('./user.route')
 const middlewareProductcategory=require('../../middleware/client/product-category.middleware')
 const middlewareCart=require('../../middleware/client/cart.middelware')
 
@@ -16,5 +17,6 @@ module.exports=(app)=>{
   app.use('/products',routeproducts)
   app.use('/search',routeSearch)
   app.use('/checkout',routeCheckout)
+  app.use('/user',userCheckout)
 
 }
