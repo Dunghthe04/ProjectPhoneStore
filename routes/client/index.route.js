@@ -11,7 +11,8 @@ module.exports=(app)=>{
   //thêm middleware cartId cho tất cả trang client
   app.use(middlewareCart.cart)
   app.use('/',routeHome)
+  app.use('/cart',routeCart)
   app.use('/products',routeproducts)
   app.use('/search',routeSearch)
-  app.use('/cart',routeCart)
+
 }
