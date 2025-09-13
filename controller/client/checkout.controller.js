@@ -72,7 +72,23 @@ module.exports.order=async(req,res)=>{
 
 //success
 module.exports.successOrder=async(req,res)=>{
+    const orderId=req.params.orderId;
+    //lay order
+    const order=await Order.findOne({_id: orderId})
+    //can lay ra gia moi, va tinh tong tien
+    for(const product of order.products){
+       const productInfor=await Product.findOne({_id: product.product_id}).select("price thumbnail title discountPercentage");
+       //thêm thông tin sp vào object product
+       product.productInfor=productInfor;
+       //thêm giá mới sp vào object product
+       product.newPrice=newPriceHelper.newPrice(product)
+       //thêm tổng tiền object product
+       product.totalPrice=product.newPrice*product.quantity
+    }
+    //thêm tổng tiền order vào order
+    order.totalOrder=order.products.reduce((sum,item)=> sum+item.totalPrice,0)
     res.render("client/pages/checkout/success.pug",{
         pageTitle: "Đặt hàng thành công",
+        order:order
     })
 }
