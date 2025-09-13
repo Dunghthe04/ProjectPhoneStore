@@ -10,5 +10,5 @@ module.exports.newPriceArray=(listProduct)=>{
 //lấy giá mới cho 1 sản phẩm, là 1 object truyền vào đây và đổi giá luôn
 module.exports.newPrice=(product)=>{
      const newPrice=(product.price - (product.price*(product.discountPercentage/100))).toFixed(0);
-     return newPrice
+     return parseInt(newPrice)
 }
