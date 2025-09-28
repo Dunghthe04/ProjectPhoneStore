@@ -98,7 +98,24 @@ module.exports.forgotPost = async (req, res) => {
     await forgotPassword.save();
     //sau đó gửi otp sang email\
     const subject="MÃ OTP XÁC NHẬN"
-    const html=`Mã otp xác nhận đổi mật khẩu của bạn là <b style="color: green">${otp}</b>. Mã có hiệu lực 3 phút`
+    const html = `
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+    <div style="background: #1877f2; color: #fff; padding: 16px; text-align: center;">
+      <h2>Xác nhận đổi mật khẩu</h2>
+    </div>
+    <div style="padding: 20px; color: #333; line-height: 1.5;">
+      <p>Xin chào,</p>
+      <p>Mã OTP xác nhận đổi mật khẩu của bạn là:</p>
+      <p style="font-size: 24px; font-weight: bold; color: green; text-align: center; margin: 20px 0;">
+        ${otp}
+      </p>
+      <p>Mã có hiệu lực trong <b>3 phút</b>. Vui lòng không chia sẻ mã này cho bất kỳ ai.</p>
+    </div>
+    <div style="background: #f9f9f9; padding: 12px; text-align: center; font-size: 12px; color: #888;">
+      Đây là email tự động, vui lòng không trả lời.
+    </div>
+  </div>
+  `;
 
     SendEmailhelper.sendEmail(email,subject,html)
     //sau khi có opt -> hiển thị trang nhập otp
