@@ -23,7 +23,6 @@ block main
           tbody 
               each item,index in cartDetail.products
                 tr 
-                  td #{cart.quantityProduct}
                   td #{index+1}
                   td 
                     img(src=item.productInfo.thumbnail alt=item.productInfo.title width="80px")

@@ -31,6 +31,7 @@ module.exports.detail = async (req, res) => {
       deleted: false
     }
     const product = await Product.findOne(find);
+    
 
     if (product.category) {
       const category = await ProductCategory.findOne({
