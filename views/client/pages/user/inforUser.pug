@@ -1,0 +1,31 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+block main 
+  h1(class="mb-4") Thông tin cá nhân
+  if(user.avatar)
+    img(
+        src=user.avatar
+        width: 150px
+        class="mb-3"
+      )
+  else 
+    img(
+        src="/admin/images/avatar.png"
+        width: 150px
+        class="mb-3"
+      )    
+  if(user.fullname)
+    div(class="mb-4") Họ tên: <b>#{user.fullname}</b>
+  if(user.email)
+    div(class="mb-4") Email: <b>#{user.email}</b>
+  if(user.status)
+    div(class="mb-4") Trạng thái: <b>#{user.status}</b>
+  if(user.createdAt)
+    span(class="mb-4") Ngày kích hoạt
+      +formatDateTime(user.createAt) 
+  a(
+    href=`${prefixAdmin}/my-user/edit`
+    class="btn btn-warning btn-sm") Chỉnh sửa thông tin 
+  script(src="/admin/js/product.js")       
+
+  

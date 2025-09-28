@@ -18,4 +18,7 @@ router.post('/password/OPTconfirm',forgotValidate.optEnter,userController.OPTcon
 //sang trang reset password
 router.get('/password/reset',userController.reset)
 router.post('/password/reset',forgotValidate.resetPassword,userController.resetPost)
+
+//thông tin tài khoản client
+router.get('/info',userController.info)
 module.exports=router

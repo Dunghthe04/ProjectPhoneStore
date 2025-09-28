@@ -174,4 +174,17 @@ module.exports.resetPost = async (req, res) => {
 
     req.flash("success","Cập nhập mật khẩu thành công")
     res.redirect('/user/login')
+
+}
+
+//thông tin tài khoản
+module.exports.info = async (req, res) => {
+    // lấy thông tin tài khoản dựa trên userToken
+    const userToken=req.cookies.userToken;
+
+    const user=await User.findOne({userToken: userToken})
+    res.render("client/pages/user/inforUser", {
+        pageTitle: "Thông tin tài khoản",
+        user:user
+    })
 }

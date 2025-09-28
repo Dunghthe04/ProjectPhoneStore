@@ -38,7 +38,9 @@ header.header
                //-nếu chưa có giỏ hàng -> in o, nếu có r-> in số lg
                a(href="/cart") Giỏ hàng(#{cart.quantityProduct? cart.quantityProduct:0})
              //-nếu có user thì hiện đăng xuất
-             if(user)    
+             if(user) 
+               li
+                a(href="/user/info") #{user.fullname}      
                li
                 a(href="/user/logout") Đăng xuất   
              else 
