@@ -2,6 +2,7 @@ const User = require('../../models/user.model')
 const randomOTP = require('../../helpers/randomOTP')
 const ForgotPassword = require('../../models/forgot-password.mode')
 const SendEmailhelper = require('../../helpers/sendEmailOTP')
+const Cart=require('../../models/carts.model')
 var md5 = require('md5');
 module.exports.register = (req, res) => {
     res.render("client/pages/user/register", {
@@ -59,12 +60,23 @@ module.exports.loginPost = async (req, res) => {
         return;
 
     }
+    //lấy ra cart dựa trên user_id đăng nhập
+    const cart=await Cart({user_id: user.id})
+    if(cart){
+        //nếu mà có cart -> cái cart đó đã lưu user rồi -> chỉ cần lấy token của nó đẩy lên
+        res.cookie("userToken", user.userToken);
+    }else{
+        //nếu mà ko có cart nào user như vậy -> lần đầu đăng nhâp -> tìm cart đó và lưu user
+        await Cart.updateOne({id: req.cookies.cartId},{user_id: user.id})
+    }
     //gán cookie lên
     res.cookie("userToken", user.userToken);
     res.redirect("/")
 }
 module.exports.logout = async (req, res) => {
+    //log out xóa cartId đi vì nếu tạo tài khoản mới cartid trùng nhau
     res.clearCookie("userToken");
+    res.clearCookie("cartId");
     res.redirect("/user/login")
 }
 module.exports.forgot = async (req, res) => {
