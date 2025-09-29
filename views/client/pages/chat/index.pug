@@ -6,7 +6,7 @@ block main
         .row 
          .col-12 
            +box-head("chat")
-
+       
         .row
             .col-12
                 .chat
@@ -14,24 +14,26 @@ block main
                     //.inner-avatar EY
                     //.inner-name Em Yêu
                     .inner-body
-                        .inner-incoming
-                            .inner-name Em Yêu
-                            .inner-content
-                                | A ơi sang nhà em nha, nhà em không có ai ở nhà cả
-                        .inner-outgoing
-                            .inner-content
-                                | Thế à? Ok em iu
-                        .inner-incoming
-                            .inner-name Em Yêu
-                            .inner-content
-                                | Nhanh nha nhanh nha
-                        .inner-outgoing
-                            .inner-content
-                                | Chồng đến rồi mà không thấy ai ở nhà đâu em? Khóa cửa mà :(
-                        .inner-incoming
-                            .inner-name Em Yêu
-                            .inner-content
-                                | Thì em báo nhà em không ai ở nhà mà :))
+                        //-Duyet tung ban ghi
+                        each item in chats
+                            //-kiểm tra xem nếu user tin nhắn đó = id của user hiện tại -> bên phải , ẩn tên,outgoing
+                            div(class=(item.user_id==user.id)?"inner-outgoing":"inner-incoming")
+                                if(item.user_id!=user.id)
+                                  .inner-name #{item.fullname}
+                                .inner-content #{item.content}
+                    //-         .inner-content
+                    //-             | Thế à? Ok em iu
+                    //-     .inner-incoming
+                    //-         .inner-name Em Yêu
+                    //-         .inner-content
+                    //-             | Nhanh nha nhanh nha
+                    //-     .inner-outgoing
+                    //-         .inner-content
+                    //-             | Chồng đến rồi mà không thấy ai ở nhà đâu em? Khóa cửa mà :(
+                    //-     .inner-incoming
+                    //-         .inner-name Em Yêu
+                    //-         .inner-content
+                    //-             | Thì em báo nhà em không ai ở nhà mà :))
                     .inner-foot
                         form(class="inner-form" action="")
                             input(type="text" placeholder="Nhập nội dung..." name="content")

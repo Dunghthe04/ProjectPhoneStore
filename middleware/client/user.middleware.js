@@ -9,8 +9,6 @@ module.exports.inforUser=async(req,res,next)=>{
          });
     if(user){
         res.locals.user=user;
-        console.log(user);
-        
     }     
   }
   next();
