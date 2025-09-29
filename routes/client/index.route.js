@@ -18,6 +18,7 @@ module.exports=(app)=>{
   app.use(middlewareInforUser.inforUser)
   //thêm middelware setting của admin để hiển thị logo
   app.use(middlewareSetting.setting)
+  
   app.use('/',routeHome)
   app.use('/cart',routeCart)
   app.use('/products',routeproducts)
