@@ -226,3 +226,106 @@ height: 100%;
 .uploadPreview[src=""]{
   display: none;
 }
+
+/* Chat */
+.chat {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.inner-body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inner-incoming, 
+.inner-outgoing {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+}
+
+.inner-incoming {
+  align-self: flex-start;
+}
+
+.inner-outgoing {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.inner-name {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.inner-content {
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.4;
+  display: inline-block;
+  word-wrap: break-word;
+}
+
+.inner-incoming .inner-content {
+  background: #f1f1f1;
+  color: #333;
+  border-top-left-radius: 0;
+}
+
+.inner-outgoing .inner-content {
+  background: #ff4fa1;
+  color: #fff;
+  border-top-right-radius: 0;
+}
+
+.inner-foot {
+  border-top: 1px solid #eee;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.inner-form {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+.inner-form input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  font-size: 14px;
+}
+
+.inner-form button {
+  background: #ff4fa1;
+  border: none;
+  padding: 0 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inner-form button:hover {
+  background: #e0438d;
+}
+/* endchat */

@@ -4,6 +4,7 @@ const routeSearch=require('./search.route')
 const routeCart=require('./cart.route')
 const routeCheckout=require('./checkout.route')
 const userCheckout=require('./user.route')
+const routeChat=require('./chat.route')
 const middlewareProductcategory=require('../../middleware/client/product-category.middleware')
 const middlewareCart=require('../../middleware/client/cart.middelware')
 const middlewareSetting=require('../../middleware/client/setting.middleware')
@@ -18,12 +19,13 @@ module.exports=(app)=>{
   app.use(middlewareInforUser.inforUser)
   //thêm middelware setting của admin để hiển thị logo
   app.use(middlewareSetting.setting)
-  
+
   app.use('/',routeHome)
   app.use('/cart',routeCart)
   app.use('/products',routeproducts)
   app.use('/search',routeSearch)
   app.use('/checkout',routeCheckout)
   app.use('/user',userCheckout)
+  app.use('/chat',routeChat)
 
 }
