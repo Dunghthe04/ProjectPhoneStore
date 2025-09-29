@@ -6,6 +6,7 @@ const roles=require('./roles.route')
 const accounts=require('./accounts.route')
 const auth=require('./auth.route')
 const myAccount=require('./my-account.route')
+const setting=require('./setting.route')
 const authMiddlewrare=require('../../middleware/admin/auth.middleware')
 
 module.exports=(app)=>{
@@ -17,4 +18,5 @@ module.exports=(app)=>{
   app.use(`${PATH_ADMIN}/accounts`,authMiddlewrare.requireAuth,accounts)
   app.use(`${PATH_ADMIN}/auth`,auth)
   app.use(`${PATH_ADMIN}/my-account`,authMiddlewrare.requireAuth,myAccount)
+  app.use(`${PATH_ADMIN}/setting`,authMiddlewrare.requireAuth,setting)
 }

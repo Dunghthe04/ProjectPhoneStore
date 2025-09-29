@@ -2,7 +2,7 @@ const User = require('../../models/user.model')
 const randomOTP = require('../../helpers/randomOTP')
 const ForgotPassword = require('../../models/forgot-password.mode')
 const SendEmailhelper = require('../../helpers/sendEmailOTP')
-const Cart=require('../../models/carts.model')
+const Cart = require('../../models/carts.model')
 var md5 = require('md5');
 module.exports.register = (req, res) => {
     res.render("client/pages/user/register", {
@@ -60,18 +60,34 @@ module.exports.loginPost = async (req, res) => {
         return;
 
     }
-    //lấy ra cart dựa trên user_id đăng nhập
-    const cart=await Cart({user_id: user.id})
-    if(cart){
-        //nếu mà có cart -> cái cart đó đã lưu user rồi -> chỉ cần lấy token của nó đẩy lên
-        res.cookie("userToken", user.userToken);
-    }else{
-        //nếu mà ko có cart nào user như vậy -> lần đầu đăng nhâp -> tìm cart đó và lưu user
-        await Cart.updateOne({id: req.cookies.cartId},{user_id: user.id})
+    let userCart = await Cart.findOne({
+        user_id: user._id
+    });
+
+    if (userCart) {
+        // user đã có cart trong DB
+        res.cookie("cartId", userCart.id);
+    } else {
+        // user chưa có cart → lấy cart từ cookie (guest cart)
+        const guestCart = await Cart.findById(req.cookies.cartId);
+
+        if (guestCart) {
+            // gán cart hiện tại cho user
+            guestCart.user_id = user._id;
+            await guestCart.save();
+        } else {
+            // nếu cookie cartId không tồn tại hoặc cart bị xoá -> tạo cart mới cho user
+            userCart = new Cart({
+                user_id: user._id,
+                products: []
+            });
+            await userCart.save();
+            res.cookie("cartId", userCart.id);
+        }
     }
-    //gán cookie lên
+
     res.cookie("userToken", user.userToken);
-    res.redirect("/")
+    res.redirect("/");
 }
 module.exports.logout = async (req, res) => {
     //log out xóa cartId đi vì nếu tạo tài khoản mới cartid trùng nhau
@@ -109,7 +125,7 @@ module.exports.forgotPost = async (req, res) => {
     const forgotPassword = new ForgotPassword(objectForgotPassword);
     await forgotPassword.save();
     //sau đó gửi otp sang email\
-    const subject="MÃ OTP XÁC NHẬN"
+    const subject = "MÃ OTP XÁC NHẬN"
     const html = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
     <div style="background: #1877f2; color: #fff; padding: 16px; text-align: center;">
@@ -129,18 +145,18 @@ module.exports.forgotPost = async (req, res) => {
   </div>
   `;
 
-    SendEmailhelper.sendEmail(email,subject,html)
+    SendEmailhelper.sendEmail(email, subject, html)
     //sau khi có opt -> hiển thị trang nhập otp
     res.redirect(`/user/password/OPTconfirm?email=${email}`)
 }
 //bắt nhập otp
 module.exports.OPTconfirm = async (req, res) => {
     const email = req.query.email;
-    console.log("email",email);
-    
+    console.log("email", email);
+
     res.render("client/pages/user/confirmOTP", {
         pageTitle: "Xác nhận mã OTP",
-        email:email
+        email: email
     })
 }
 //sau khi nhập otp
@@ -171,7 +187,7 @@ module.exports.OPTconfirmPost = async (req, res) => {
 
 //trang reset password 
 module.exports.reset = async (req, res) => {
-     res.render("client/pages/user/resetPassword", {
+    res.render("client/pages/user/resetPassword", {
         pageTitle: "Cập nhập mật khẩu",
     })
 }
@@ -179,12 +195,16 @@ module.exports.reset = async (req, res) => {
 module.exports.resetPost = async (req, res) => {
     //lấy ra token để biết là tài khoản nào 
     const tokenUser = req.cookies.userToken;
-    let password=req.body.password;
-    password=md5(password)    
+    let password = req.body.password;
+    password = md5(password)
 
-    await User.updateOne({userToken: tokenUser},{password: password})
+    await User.updateOne({
+        userToken: tokenUser
+    }, {
+        password: password
+    })
 
-    req.flash("success","Cập nhập mật khẩu thành công")
+    req.flash("success", "Cập nhập mật khẩu thành công")
     res.redirect('/user/login')
 
 }
@@ -192,11 +212,13 @@ module.exports.resetPost = async (req, res) => {
 //thông tin tài khoản
 module.exports.info = async (req, res) => {
     // lấy thông tin tài khoản dựa trên userToken
-    const userToken=req.cookies.userToken;
+    const userToken = req.cookies.userToken;
 
-    const user=await User.findOne({userToken: userToken})
+    const user = await User.findOne({
+        userToken: userToken
+    })
     res.render("client/pages/user/inforUser", {
         pageTitle: "Thông tin tài khoản",
-        user:user
+        user: user
     })
 }

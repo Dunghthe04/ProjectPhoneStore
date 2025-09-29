@@ -4,7 +4,7 @@ header.header
      .row.align-items-center 
        .col-3
          .inner-logo 
-           img(src="/images/logo.svg" alt="Logo")
+           img(src=setting.logo alt="Logo")
 
        .col-5 
          form(
@@ -36,7 +36,7 @@ header.header
                 +sub-menu(layoutProductCategory,pathProduct)
              li
                //-nếu chưa có giỏ hàng -> in o, nếu có r-> in số lg
-               a(href="/cart") Giỏ hàng(#{cart.quantityProduct? cart.quantityProduct:0})
+               a(href="/cart") Giỏ hàng(#{cart && cart.quantityProduct ? cart.quantityProduct : 0})
              //-nếu có user thì hiện đăng xuất
              if(user) 
                li

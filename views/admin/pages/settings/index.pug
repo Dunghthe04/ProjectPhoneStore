@@ -1,0 +1,90 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert
+include ../../mixins/tree
+block main 
+   //-nếu tài khoản có quyền edit-> hiện
+   //- value=(setting.websiteName? setting.websiteName: "")
+   if(roleAccount.permissions.includes("setting-edit"))
+    h1(class="mb-4") Cài đặt chung
+    +alert-success(3000)
+    +alert-error(3000)
+    form(
+        action=`${prefixAdmin}/setting/general?_method=PATCH`
+        method="POST"
+        class="form-create-prouct"
+        enctype="multipart/form-data"
+    ) 
+      div(class="form-group")
+         lable(for="websiteName") Tên website*
+         input(
+            id="websiteName"
+            type="text"
+            name="websiteName"
+            class="form-control"
+            value=setting.websiteName
+            require
+         )
+      div(
+         class="form-group"
+         upload-image
+         )
+            lable(for="logo") Logo
+            input(
+               id="logo"
+               type="file"
+               name="logo"
+               class="form-control-file"
+               accept="image/*"
+               input-upload-image
+            )  
+            img(
+               src=(setting.logo? setting.logo: "")
+               upload-image-preview
+               class="uploadPreview"
+            )
+      div(class="form-group")
+         lable(for="phone") Số điện thoại
+         input(
+            id="phone"
+            type="text"
+            name="phone"
+            class="form-control"
+            value=(setting.phone? setting.phone: "")
+            require
+         )    
+      div(class="form-group")
+         lable(for="email") Email
+         input(
+            id="email"
+            type="text"
+            name="email"
+            class="form-control"
+            value=(setting.email? setting.email: "")
+            require
+         )   
+      div(class="form-group")
+         lable(for="address") Address
+         input(
+            id="address"
+            type="text"
+            name="address"
+            class="form-control"
+            value=(setting.address? setting.address: "")
+            require
+         )     
+      div(class="form-group")
+         lable(for="copyright") Copyright
+         input(
+            id="copyright"
+            type="text"
+            name="copyright"
+            class="form-control"
+            value=(setting.copyright? setting.copyright: "")
+            require
+         )         
+      div(class="form-group")
+        button(
+            type="submit"
+            class="btn btn-primary"
+        ) Cập nhập 
+    script(src="/admin/js/products.js")       

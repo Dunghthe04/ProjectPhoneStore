@@ -22,4 +22,7 @@
        //-nếu có quyền xem tài khoản mới hiện ở sider      
        if(roleAccount.permissions.includes("account-view"))    
         li 
-          a(href=`${prefixAdmin}/accounts`) Quản lý tài khoản    
+          a(href=`${prefixAdmin}/accounts`) Quản lý tài khoản  
+       if(roleAccount.permissions.includes("setting-view"))    
+        li 
+          a(href=`${prefixAdmin}/setting/general`) Cài đặt chung      
