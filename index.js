@@ -37,9 +37,9 @@ const port = process.env.PORT
 //socket.io
 const server = http.createServer(app);
 const io = new Server(server);
-io.on('connection', (socket) => {
-  console.log('a user connected',socket.id);
-});
+//tạo biến toàn app cho _io -> dùng mọi nơi, để controller dùng được và bắt sự kiện bên đó
+global._io=io
+
 //route
 const clientRoute = require('./routes/client/index.route.js')
 const adminRoute = require('./routes/admin/index.route.js')
