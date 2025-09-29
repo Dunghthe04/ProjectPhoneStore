@@ -10,15 +10,23 @@ module.exports.index = async (req, res) => {
         socket.on('CLIENT_SEND_MESS', async(msg) => {
             //lưu tin nhắn vào database
             //lấy ra ng nhắn
-            const user_id=res.locals.user.id;
+            const user=res.locals.user;
             const message=msg
             const newChat={
-                user_id:user_id,
+                user_id:user.id,
                 content:message
             }
 
             const chat=new Chat(newChat)
             await chat.save();
+
+            //lưu server xong trả luôn tin nhắn đó về phía mọi người-realtime
+            //trả về gồm id người gửi, tên ng gửi, nội dung
+            _io.emit("SERVER_RESPONSE_MESS",{
+               user_id:user.id,
+               fullname:user.fullname,
+               content:msg
+            })
         });
     });
 

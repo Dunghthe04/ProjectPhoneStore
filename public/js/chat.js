@@ -1,6 +1,4 @@
 //lấy thông tin đoạn chat(phía client) gửi lên server(controller)
-
-//lấy form
 const form=document.querySelector(".chat .inner-form")
 if(form){
   //lăng nghe sự kiện submit
@@ -13,4 +11,39 @@ if(form){
         e.target.elements.content.value=""; 
     }
   })    
+}
+
+//nhận tin nhắn từ server gửi về
+socket.on("SERVER_RESPONSE_MESS",(data)=>{
+  //Lấy ra id chat của user hiện tại
+  const user_id=document.querySelector("[user_id]").getAttribute("user_id");
+  //tạo ra 1 thẻ bọc sau đó chèn content và fullname
+  const div=document.createElement("div")
+
+  //kiểm tra xem tin nào của ông í -> ko hiện tên và hiện bên phải(dựa trên id từ server và id từ html)
+  let html=''
+  if(data.user_id==user_id){
+    div.classList.add("inner-outgoing");
+  }else{
+    div.classList.add("inner-incoming");
+    html=`
+     <div class="inner-name">${data.fullname}</div>
+      `
+  }
+  div.innerHTML=`
+     ${html}
+     <div class="inner-content">${data.content}</div>
+    `;
+  //sau đó chèn vào boddy
+  const body=document.querySelector(".chat .inner-body");
+  body.appendChild(div)
+  //sau khi chèn xong cũng phải cuộn xuống
+  bodyChat.scrollTop=bodyChat.scrollHeight;
+})
+
+//Thêm js để khi mà có tin mới -> scroll phải cuộc cuối cùng
+const bodyChat=document.querySelector(".chat .inner-body");
+if(bodyChat){
+  //cách top đúng = chiều rộng
+  bodyChat.scrollTop=bodyChat.scrollHeight;
 }
