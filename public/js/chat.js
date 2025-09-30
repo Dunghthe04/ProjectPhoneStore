@@ -1,3 +1,4 @@
+import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
 //lấy thông tin đoạn chat(phía client) gửi lên server(controller)
 const form=document.querySelector(".chat .inner-form")
 if(form){
@@ -47,3 +48,27 @@ if(bodyChat){
   //cách top đúng = chiều rộng
   bodyChat.scrollTop=bodyChat.scrollHeight;
 }
+
+//Hien popup emoji-picker
+//bat su kien khi click vao emoji
+const button=document.querySelector(".chat .inner-foot .button-icon");
+if(button){
+  const tooltip = document.querySelector('.tooltip')
+  Popper.createPopper(button, tooltip)
+  button.onclick=()=>{
+     tooltip.classList.toggle('shown')
+  }
+}
+
+//laays icon khi click
+const emoji=document.querySelector('emoji-picker')
+if(emoji){
+  let input=document.querySelector(".chat .inner-foot input")
+  emoji.addEventListener('emoji-click', (e) => {
+    const icon=e.detail.unicode
+    //laasy o input ra roi chen vao
+    input.value=input.value+icon
+  });
+
+}
+  
