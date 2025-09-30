@@ -70,5 +70,20 @@ if(emoji){
     input.value=input.value+icon
   });
 
+  //Typing-> ghi ng dùng gõ phím
+  input.addEventListener('keyup',(e)=>{
+    socket.emit("CLIENT_IS_TYPING","type")
+  })
+
 }
+
+//Lấy thông báo SERVER_RESPONSE_TYPING
+socket.on("SERVER_RESPONSE_TYPING",(data)=>{
+  console.log(data);
+})
+
+
+
+
+
   
