@@ -30,13 +30,13 @@ module.exports.index = async (req, res) => {
         });
 
         //Typing
-        socket.on('CLIENT_IS_TYPING', async (msg) => {
+        socket.on('CLIENT_IS_TYPING', async (type) => {
             const user = res.locals.user;
             //gửi thông tin thằng đang nhập(A) về cho B,C,D (trừ A) để hiện typeing    
             socket.broadcast.emit("SERVER_RESPONSE_TYPING", {
                 user_id: user.id,
                 fullname: user.fullname,
-                content: msg
+                type: type
             })
         })
     });
