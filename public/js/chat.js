@@ -2,49 +2,48 @@ import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm
 //lấy thông tin đoạn chat(phía client) gửi lên server(controller)
 const form = document.querySelector(".chat .inner-form")
 if (form) {
-  //lăng nghe sự kiện submit
+  //lắng nghe sự kiện submit tin nhắn
   form.addEventListener("submit", (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const value = e.target.elements.content.value;
-    if (value) {
-      //có giá trị gửi lên server
-      socket.emit("CLIENT_SEND_MESS", value);
-      e.target.elements.content.value = "";
-      //gửi xong ẩn .. đi
-      socket.emit("CLIENT_IS_TYPING", "hidden")
-    }
+    //nếu có giá trị -> gửi lên server
+    socket.emit("CLIENT_SEND_MESS", value);
+    //reset về ô input trắng
+    e.target.elements.content.value = "";
+    //gửi xong ẩn typing đi
+    socket.emit("CLIENT_IS_TYPING", "hidden")
   })
 }
 
-//nhận tin nhắn từ server gửi về
+//nhận tin nhắn từ server gửi về(gồm thông tin ng gửi)
 socket.on("SERVER_RESPONSE_MESS", (data) => {
-  //Lấy ra id chat của user hiện tại
+  //lấy ra biến cờ user_id để biết user nào đang nhắn
   const user_id = document.querySelector("[user_id]").getAttribute("user_id");
-  //tạo ra 1 thẻ bọc sau đó chèn content và fullname
-  const div = document.createElement("div")
-  //thẻ typing
+  //tạo 1 thẻ div bọc tên + tin nhắn
+  const boxMessage = document.createElement("div");
+  //Lấy ra body để cuộn scroll
+  const bodyElement = document.querySelector(".chat .inner-body");
+  //Lấy ra box-typing
   const elementListTyping = document.querySelector(".chat .inner-list-typing");
-  //body
-  const body = document.querySelector(".chat .inner-body");
 
-  //kiểm tra xem tin nào của ông í -> ko hiện tên và hiện bên phải(dựa trên id từ server và id từ html)
-  let html = ''
-  if (data.user_id == user_id) {
-    div.classList.add("inner-outgoing");
+  //Kiểm tra xem user_id tin nhắn có phải là user_id hiện tại k -> hiện phải ko tên: hiện trái có tên
+  let html = '';
+  if (user_id == data.user_id) {
+    boxMessage.classList.add("inner-outgoing");
   } else {
-    div.classList.add("inner-incoming");
+    boxMessage.classList.add("inner-incoming");
     html = `
      <div class="inner-name">${data.fullname}</div>
-      `
+     `
   }
-  div.innerHTML = `
-     ${html}
+  boxMessage.innerHTML = `
+    ${html}
      <div class="inner-content">${data.content}</div>
-    `;
-  //sau đó chèn vào boddy, nhưng phải chèn vào trước typing,typing luôn ở cuối
-  body.insertBefore(div, elementListTyping)
-  //sau khi chèn xong cũng phải cuộn xuống
-  bodyChat.scrollTop = bodyChat.scrollHeight;
+  `
+  //Insert box-message đó trước typing -> box-typing phải ở cuối
+  bodyElement.insertBefore(boxMessage, elementListTyping);
+  //insert xong phải cuộn tin nhắn xuống cuối
+  bodyElement.scrollTop = bodyChat.scrollHeight;
 })
 
 //Thêm js để khi mà có tin mới -> scroll phải cuộc cuối cùng
@@ -64,85 +63,77 @@ if (button) {
   }
 }
 
-//function hủy typing
-let timeout;
+let timeout
 const cancelTyping = () => {
-  //Vẫn đang gõ -> xóa timeout -> hidden ko được gửi. Khi ngừng gõ -> setimeout cuối sẽ gửi
+  //nó sẽ luôn hủy timeout trước đó, nếu lần gõ phím cuối -> timeout cuối bị gọi, lúc này sẽ ẩn đi typing
   clearTimeout(timeout)
   timeout = setTimeout(() => {
-    socket.emit("CLIENT_IS_TYPING", "hidden") //sau 3 giây dừng ko gõ -> gửi hidden để ẩn
-  }, 3000);
+    socket.emit("CLIENT_IS_TYPING", "hidden")
+  }, 3000)
 }
 
-//laays icon khi click
+//Lấy icon khi click chọn
 const emoji = document.querySelector('emoji-picker')
 if (emoji) {
   let input = document.querySelector(".chat .inner-foot input")
   emoji.addEventListener('emoji-click', (e) => {
+    //lấy ra icon
     const icon = e.detail.unicode
-    //laasy o input ra roi chen vao
+    //ghép icon đó vào value hiện tại
     input.value = input.value + icon
-    //khi nhập quá dài -> nhập icon ->nó hiểu onblur -> focus đầu-> ta muốn nó vẫn focus cuối
-    let length=input.value.length;
-    input.setSelectionRange(length,length)//đặt con trỏ về cuối
-    input.focus()
-    //chèn icon xong thì cũng -> typing
-    socket.emit("CLIENT_IS_TYPING", "show")
-    //khi k nhập nữa -> hủy typing
+    //Khi chọn icon -> nó hiểu onBlur-> ta đặt con trỏ cuối và rồi focus inout
+    let inputLength = input.value.length;
+    input.setSelectionRange(inputLength, inputLength) //đặt trỏ chuột cuôi
+    input.focus();
+    //chèn icon -> thì cũng là typing
+    socket.emit("CLIENT_IS_TYPING", "show");
+    //nếu ko gõ nữa -> ẩn
     cancelTyping();
 
-  });
-
-  //Typing-> ghi ng dùng gõ phím
-  input.addEventListener('keyup', (e) => {
-    socket.emit("CLIENT_IS_TYPING", "show") // cờ: show -> báo cho controller là hiển thị ..., còn hidden là đóng
-    //ko nhập nữa -> hủy typing
-    cancelTyping();
   })
 
+  //Bắt sự kiện typing input
+  input.addEventListener('keyup', (e) => {
+    socket.emit("CLIENT_IS_TYPING", "show");
+    //khi dừng ấn -> ẩn
+    cancelTyping()
+  })
 }
 
-//Lấy thông báo SERVER_RESPONSE_TYPING
-//lấy ra box list-typing
-const elementListTyping = document.querySelector(".chat .inner-list-typing");
-if (elementListTyping) {
+//Lấy thông báo typing từ server
+//Lấy ra box-typing
+const listBoxTyping = document.querySelector(".chat .inner-list-typing");
+if (listBoxTyping) {
   socket.on("SERVER_RESPONSE_TYPING", (data) => {
-    console.log(data);
-    //nếu data là showw -> tạo div rồi nhúng vào, còn nếu hidden ẩn đi
+    //nếu là show -> tạo 1 boxTyping (tên, và group ...)
     if (data.type == "show") {
-      //kiểm tra xem có box nào có userId= ông hiện tại ko
-      const checkExitsTyping = elementListTyping.querySelector(`[user_id="${data.user_id}"]`)
-
-      //nếu chưa có -> tạo box , class, user_id
-      //còn nếu có rồi thì thôi, để chỉ tạo 1 lần typing
-      if (!checkExitsTyping) {
-        //tạo ra 1 ptu tên box-tyoping, rồi append vào listTyping
+      //Kiểm tra xem có box có thuộc tính user_id chưa, mục tiêu chỉ để tạo ra 1 box typing thôi
+      const checkExistBoxTyping = listBoxTyping.querySelector(`[user_id="${data.user_id}"]`);
+      if (!checkExistBoxTyping) {
+        //nếu chưa có thì tạo 1 boxTyping
         const boxTyping = document.createElement("div");
         boxTyping.classList.add("box-typing");
-
-        //thêm thuộc tính là id của người dùng
-        boxTyping.setAttribute("user_id", data.user_id);
-        //thêm các thẻ (tên, ...) vào 
+        //gán thêm thuộc tính user_id
+        boxTyping.setAttribute("user_id", data.user_id)
         boxTyping.innerHTML = `
         <div class="inner-name">${data.fullname}</div>
         <div class="inner-dots">
              <span></span> 
              <span></span> 
              <span></span> 
-        </div>                 
-      `
-        //sau đó apend vào list-typing
-        elementListTyping.appendChild(boxTyping)
+        </div> 
+        `
+        //chèn box-typing đó vào listBox
+        listBoxTyping.appendChild(boxTyping);
+        //thêm xong cx phải cuộn
         bodyChat.scrollTop = bodyChat.scrollHeight;
       }
-
-
     } else {
-      //nếu là hidden-> remove box-typing đi
-      const boxTypingRemove = elementListTyping.querySelector(`[user_id="${data.user_id}"]`)
-      console.log(boxTypingRemove);
-
-      elementListTyping.removeChild(boxTypingRemove);
+      //nếu là hidden-> xóa boxTyping đi
+      const boxTypingRemove = listBoxTyping.querySelector(`[user_id="${data.user_id}"]`);
+      if (boxTypingRemove) {
+        listBoxTyping.removeChild(boxTypingRemove)
+      }
     }
   })
 }
